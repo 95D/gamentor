@@ -8,4 +8,16 @@ dependencies {
 }
 
 gradlePlugin {
+    plugins {
+        register("androidApplication") {
+            id = "jp.co.nintendo.android.application"
+            implementationClass = "AndroidAppConventionPlugin"
+        }
+    }
+    plugins {
+        register("androidLibrary") {
+            id = "jp.co.nintendo.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+    }
 }

@@ -27,4 +27,3 @@ plugins {
 
 rootProject.name = "gamentor"
 include(":app")
-include(":library-modules:chat-message-domain-api")

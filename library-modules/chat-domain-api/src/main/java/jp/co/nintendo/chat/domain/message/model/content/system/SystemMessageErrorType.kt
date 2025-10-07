@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.message.domain.model.content.system
+package jp.co.nintendo.chat.domain.message.model.content.system
 
 /**
  * Defines error types that can occur during chat operations.

@@ -1,8 +1,8 @@
-package jp.co.nintendo.chat.message.domain.repository
+package jp.co.nintendo.chat.domain.repository
 
 import androidx.paging.PagingData
-import jp.co.nintendo.chat.message.domain.model.ChatMessage
-import jp.co.nintendo.chat.message.domain.model.paging.MessagePageAnchor
+import jp.co.nintendo.chat.domain.message.model.ChatMessage
+import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import kotlinx.coroutines.flow.Flow
 
 /**

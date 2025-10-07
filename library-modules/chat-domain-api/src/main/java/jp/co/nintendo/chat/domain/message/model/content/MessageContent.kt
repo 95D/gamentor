@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.message.domain.model.content
+package jp.co.nintendo.chat.domain.message.model.content
 
 /**
  * Represents the content payload of a chat message.

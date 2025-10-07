@@ -1,7 +1,7 @@
-package jp.co.nintendo.chat.message.domain.model
+package jp.co.nintendo.chat.domain.message.model
 
-import jp.co.nintendo.chat.message.domain.model.content.MessageContent
-import jp.co.nintendo.chat.message.domain.model.content.system.SystemMessageErrorType
+import jp.co.nintendo.chat.domain.message.model.content.MessageContent
+import jp.co.nintendo.chat.domain.message.model.content.system.SystemMessageErrorType
 
 /**
  * Represents a message in a chat conversation between users and an AI assistant.

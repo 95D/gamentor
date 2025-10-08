@@ -8,7 +8,7 @@ import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
  * Provides type-safe handling of different message sources through sealed interface pattern.
  */
 data class ChatMessage(
-    val messageId: String,
+    val localMessageId: String,
     val createdAtMillis: Long,
     val content: MessageContent,
     val senderId: String,

@@ -11,6 +11,7 @@ import kotlinx.serialization.SerialName
 @Serializable
 @SerialName("message_content")
 sealed interface MessageContent
+
 /**
  * A [MessageContent] representing plain text.
  */
@@ -29,7 +30,6 @@ data class TextContent(
 data class ToolRequestContent(
     val toolCalls: List<ToolCall>
 ) : MessageContent {
-
     @Serializable
     data class ToolCall(
         @SerialName("tool_call_id")
@@ -46,11 +46,16 @@ data class ToolRequestContent(
  */
 @Serializable
 @SerialName("tool_return_content")
-data class ToolReturnContent(
-    @SerialName("tool_call_id")
-    val toolCallId: String,
-    val content: String
-) : MessageContent
+data class ToolResponseContent(
+    val toolReturns: List<ToolReturn>
+) : MessageContent {
+    @Serializable
+    data class ToolReturn(
+        @SerialName("tool_call_id")
+        val toolCallId: String,
+        val content: String
+    )
+}
 
 @Serializable
 @SerialName("system_error_content")

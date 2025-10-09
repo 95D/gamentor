@@ -29,7 +29,7 @@ rootProject.name = "gamentor"
 include(":app")
 include(":library-modules:chat-domain-api")
 include(":library-modules:automation-domain-api")
-include(":library-modules:automation-domain-impl")
+include(":library-modules:automation-usecase-impl")
 include(":library-modules:chat-data-source-local-api")
 include(":library-modules:chat-data-source-remote-api")
 include(":library-modules:chat-data-repository-impl")

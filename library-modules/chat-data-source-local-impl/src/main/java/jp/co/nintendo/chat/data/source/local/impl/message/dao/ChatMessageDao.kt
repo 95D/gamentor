@@ -8,6 +8,9 @@ import androidx.room.Query
 import jp.co.nintendo.chat.data.source.local.impl.message.entity.ChatMessageDbEntity
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * A data access object for accessing chat message table
+ */
 @Dao
 interface ChatMessageDao {
     @Query(

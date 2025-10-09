@@ -7,6 +7,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import jp.co.nintendo.chat.data.source.local.impl.channel.entity.ChatChannelDbEntity
 
+/**
+ * A data access object for accessing chat channel table
+ */
 @Dao
 interface ChatChannelDao {
     @Query(

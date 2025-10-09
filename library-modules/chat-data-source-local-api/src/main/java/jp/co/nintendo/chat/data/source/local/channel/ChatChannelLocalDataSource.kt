@@ -12,5 +12,4 @@ interface ChatChannelLocalDataSource {
     fun selectChannel(channelId: String): ChatChannelEntity?
     fun insert(entity: ChatChannelEntity)
     fun deleteChannel(channelId: String)
-    fun deleteAllChannels()
 }

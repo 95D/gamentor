@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ChatMessageRepository {
     fun observeLatestMessage(channelId: String): Flow<ChatMessage?>
-    fun loadLatestMessagePage(channelId: String): Flow<PagingData<ChatMessage>>
     suspend fun loadMessagePage(
         channelId: String,
         anchor: MessagePageAnchor

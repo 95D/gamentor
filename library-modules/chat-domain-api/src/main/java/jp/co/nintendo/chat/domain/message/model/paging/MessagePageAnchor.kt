@@ -12,5 +12,5 @@ sealed interface MessagePageAnchor {
     /**
      * A [MessagePageAnchor] for messages around message with messageId
      */
-    data class Around(val messageId: String) : MessagePageAnchor
+    data class Around(val localMessageId: String) : MessagePageAnchor
 }

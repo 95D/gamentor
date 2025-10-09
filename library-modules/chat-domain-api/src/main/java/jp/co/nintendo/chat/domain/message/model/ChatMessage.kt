@@ -11,6 +11,5 @@ data class ChatMessage(
     val localMessageId: String,
     val createdAtMillis: Long,
     val content: MessageContent,
-    val senderId: String,
     val senderExtras: MessageSenderExtras
 )

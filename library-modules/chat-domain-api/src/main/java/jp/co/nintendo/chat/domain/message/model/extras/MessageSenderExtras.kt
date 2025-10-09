@@ -13,7 +13,7 @@ sealed interface MessageSenderExtras
  */
 @Serializable
 @SerialName("user")
-data object UserExtras : MessageSenderExtras
+data object AppOwnerExtras : MessageSenderExtras
 
 /**
  * A [MessageSenderExtras] for the AI Assistant sender

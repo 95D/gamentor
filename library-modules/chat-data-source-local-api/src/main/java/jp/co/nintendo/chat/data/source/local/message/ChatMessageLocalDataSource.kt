@@ -2,6 +2,7 @@ package jp.co.nintendo.chat.data.source.local.message
 
 import androidx.paging.PagingData
 import jp.co.nintendo.chat.data.source.local.message.entity.ChatMessageEntity
+import jp.co.nintendo.chat.data.source.local.message.model.ChatMessageInsertResult
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -22,8 +23,7 @@ interface ChatMessageLocalDataSource {
         anchorCreatedAt: Long
     ): Int
 
-    fun insert(entity: ChatMessageEntity)
+    fun insert(entity: ChatMessageEntity): ChatMessageInsertResult
     fun deleteMessage(localMessageId: String)
     fun deleteAllMessagesInChannel(channelId: String)
-    fun deleteAllMessages()
 }

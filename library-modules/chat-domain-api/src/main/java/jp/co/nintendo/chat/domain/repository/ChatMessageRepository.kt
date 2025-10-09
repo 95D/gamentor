@@ -17,7 +17,7 @@ interface ChatMessageRepository {
         channelId: String,
         anchor: MessagePageAnchor
     ): Flow<PagingData<ChatMessage>>
-    suspend fun selectMessage(messageId: String): ChatMessage?
+    suspend fun selectMessage(localMessageId: String): ChatMessage?
     suspend fun exchangeMessage(
         channelId: String,
         messageRequest: ChatMessageRequest

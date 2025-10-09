@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":library-modules:chat-domain-api"))
     implementation(project(":library-modules:chat-data-source-local-api"))
     implementation(project(":library-modules:chat-data-source-remote-api"))
+    implementation(project(":library-modules:id-domain-api"))
 
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
@@ -28,7 +29,7 @@ dependencies {
     implementation(libs.bundles.paging)
     implementation(libs.kotlinx.serialization.json)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.androidx.junit)
-    testImplementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.paging.testing)
 }

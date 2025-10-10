@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 /**
- * An implementation of [ChatMessageRepository]
+ * An implementation of [ChatMessageRepository] for AI Assistant chat
  */
 class AiAssistantChatRepositoryImpl @Inject constructor(
     private val messageLocalDataSource: ChatMessageLocalDataSource,

@@ -8,6 +8,9 @@ import jp.co.nintendo.id.domain.factory.EntityIdFactory
 import jp.co.nintendo.id.infra.impl.factory.EntityIdFactoryImpl
 import javax.inject.Singleton
 
+/**
+ * A binding components in id-infra-impl module
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class IdInfraBindings {

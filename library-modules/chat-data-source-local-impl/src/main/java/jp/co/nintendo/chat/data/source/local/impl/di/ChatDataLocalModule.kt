@@ -11,6 +11,9 @@ import jp.co.nintendo.chat.data.source.local.impl.db.ChatDatabase
 import jp.co.nintendo.chat.data.source.local.impl.message.dao.ChatMessageDao
 import javax.inject.Singleton
 
+/**
+ * A provider components in chat-data-source-local-impl module
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object ChatDataLocalModule {

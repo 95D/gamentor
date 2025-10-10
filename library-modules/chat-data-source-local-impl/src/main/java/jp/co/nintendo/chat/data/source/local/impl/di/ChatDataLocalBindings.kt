@@ -10,6 +10,9 @@ import jp.co.nintendo.chat.data.source.local.impl.message.ChatMessageLocalDataSo
 import jp.co.nintendo.chat.data.source.local.message.ChatMessageLocalDataSource
 import javax.inject.Singleton
 
+/**
+ * A binding components in chat-data-source-local-impl module
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ChatDataLocalBindings {

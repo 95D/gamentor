@@ -27,6 +27,7 @@ plugins {
 
 rootProject.name = "gamentor"
 include(":app")
+include(":library-modules:multi-lang-resources")
 include(":library-modules:chat-domain-api")
 include(":library-modules:automation-domain-api")
 include(":library-modules:automation-usecase-impl")

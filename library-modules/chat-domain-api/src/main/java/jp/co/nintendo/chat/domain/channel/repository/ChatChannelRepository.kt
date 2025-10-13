@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.Flow
  * A repository for managing chat channels
  */
 interface ChatChannelRepository {
-    suspend fun loadChannelPage(): Flow<PagingData<ChatChannel>>
+    fun loadChannelPage(): Flow<PagingData<ChatChannel>>
+    suspend fun createNewChatChannel(): String?
     suspend fun selectChannel(channelId: String): ChatChannel?
     suspend fun deleteChannel(channelId: String)
 }

@@ -3,10 +3,12 @@ package jp.co.nintendo.chat.data.repository.impl.channel
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import jp.co.nintendo.chat.data.repository.impl.channel.factory.ChatChannelEntityFactory
 import jp.co.nintendo.chat.data.repository.impl.channel.mapper.ChatChannelMapper
 import jp.co.nintendo.chat.data.repository.impl.channel.repository.ChatChannelRepositoryImpl
 import jp.co.nintendo.chat.data.source.local.channel.ChatChannelLocalDataSource
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
+import jp.co.nintendo.chat.data.source.local.channel.model.ChatChannelInsertResult
 import jp.co.nintendo.chat.domain.channel.model.ChatChannel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -37,11 +39,18 @@ class ChatChannelRepositoryImplTest {
     @Mock
     private lateinit var channelMapper: ChatChannelMapper
 
+    @Mock
+    private lateinit var chatChannelEntityFactory: ChatChannelEntityFactory
+
     private lateinit var target: ChatChannelRepositoryImpl
 
     @Before
     fun setUp() {
-        target = ChatChannelRepositoryImpl(channelLocalDataSource, channelMapper)
+        target = ChatChannelRepositoryImpl(
+            channelLocalDataSource,
+            channelMapper,
+            chatChannelEntityFactory
+        )
     }
 
     @Test
@@ -70,6 +79,34 @@ class ChatChannelRepositoryImplTest {
         whenever(channelMapper.mapToDomain(channelEntity))
             .doReturn(channel)
         assertEquals(channel, target.selectChannel("test_channel"))
+    }
+
+    @Test
+    fun `Insert channel entity success`() = runTest {
+        val channelEntity =
+            ChatChannelEntity(channelId = "test_channel", displayName = "displayName")
+        whenever(chatChannelEntityFactory.create()).doReturn(channelEntity)
+        whenever(channelLocalDataSource.insert(channelEntity))
+            .doReturn(ChatChannelInsertResult.Success)
+
+        assertEquals(
+            "test_channel",
+            target.createNewChatChannel()
+        )
+    }
+
+    @Test
+    fun `Insert channel entity failed`() = runTest {
+        val channelEntity =
+            ChatChannelEntity(channelId = "test_channel", displayName = "displayName")
+        whenever(chatChannelEntityFactory.create()).doReturn(channelEntity)
+        whenever(channelLocalDataSource.insert(channelEntity))
+            .doReturn(ChatChannelInsertResult.Failure.Unknown)
+
+        assertEquals(
+            null,
+            target.createNewChatChannel()
+        )
     }
 
     @Test

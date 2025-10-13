@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import jp.co.nintendo.chat.data.source.local.impl.channel.dao.ChatChannelDao
 import jp.co.nintendo.chat.data.source.local.impl.db.ChatDatabase
 import jp.co.nintendo.chat.data.source.local.impl.message.dao.ChatMessageDao
 import javax.inject.Singleton
@@ -26,4 +27,8 @@ object ChatDataLocalModule {
     @Provides
     fun provideMessageDao(database: ChatDatabase): ChatMessageDao =
         database.getChatMessageDao()
+
+    @Provides
+    fun provideChannelDao(database: ChatDatabase): ChatChannelDao =
+        database.getChatChannelDao()
 }

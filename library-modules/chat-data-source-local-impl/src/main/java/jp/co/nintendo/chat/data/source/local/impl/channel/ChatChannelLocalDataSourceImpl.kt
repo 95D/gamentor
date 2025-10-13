@@ -1,15 +1,19 @@
 package jp.co.nintendo.chat.data.source.local.impl.channel
 
+import android.database.sqlite.SQLiteConstraintException
+import android.database.sqlite.SQLiteFullException
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import jp.co.nintendo.chat.data.source.local.channel.ChatChannelLocalDataSource
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
+import jp.co.nintendo.chat.data.source.local.channel.model.ChatChannelInsertResult
 import jp.co.nintendo.chat.data.source.local.impl.channel.dao.ChatChannelDao
 import jp.co.nintendo.chat.data.source.local.impl.channel.entity.ChatChannelDbEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 class ChatChannelLocalDataSourceImpl @Inject constructor(
@@ -31,8 +35,17 @@ class ChatChannelLocalDataSourceImpl @Inject constructor(
     override fun selectChannel(channelId: String): ChatChannelEntity? =
         chatChannelDao.selectChannel(channelId)?.let(this::mapToEntity)
 
-    override fun insert(entity: ChatChannelEntity) =
-        chatChannelDao.insert(mapToDbEntity(entity))
+    override fun insert(entity: ChatChannelEntity): ChatChannelInsertResult =
+        try {
+            chatChannelDao.insert(mapToDbEntity(entity))
+            ChatChannelInsertResult.Success
+        } catch (e: SQLiteConstraintException) {
+            Timber.e(e)
+            ChatChannelInsertResult.Failure.Unknown
+        } catch (e: SQLiteFullException) {
+            Timber.e(e)
+            ChatChannelInsertResult.Failure.FullDisk
+        }
 
     override fun deleteChannel(channelId: String) =
         chatChannelDao.deleteChannel(channelId)

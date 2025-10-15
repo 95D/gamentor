@@ -1,12 +1,17 @@
 package jp.co.nintendo.automation.domain.impl.tool
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import jp.co.nintendo.automation.usecase.impl.tool.model.ToolCallState
-import jp.co.nintendo.automation.usecase.impl.tool.usecase.ProcessToolUseCaseImpl
+import app.cash.turbine.test
 import jp.co.nintendo.automation.domain.tool.model.ToolCall
+import jp.co.nintendo.automation.domain.tool.model.ToolProcessLabel
+import jp.co.nintendo.automation.domain.tool.model.decision.UserApproveLabel
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecision
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
 import jp.co.nintendo.automation.usecase.impl.tool.Tool
+import jp.co.nintendo.automation.usecase.impl.tool.ToolFactory
+import jp.co.nintendo.automation.usecase.impl.tool.model.CreateToolResult
+import jp.co.nintendo.automation.usecase.impl.tool.model.ToolCallState
+import jp.co.nintendo.automation.usecase.impl.tool.usecase.ProcessToolUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Before
@@ -17,7 +22,6 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.mockito.quality.Strictness
@@ -33,10 +37,10 @@ class ProcessToolUseCaseImplTest {
     val mockitoRule: MockitoRule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS)
 
     @Mock
-    private lateinit var toolFoo: Tool
+    private lateinit var toolFooFactory: ToolFactory
 
     @Mock
-    private lateinit var toolBob: Tool
+    private lateinit var toolFoo: Tool
 
     @Mock
     private lateinit var json: Json
@@ -46,66 +50,171 @@ class ProcessToolUseCaseImplTest {
     @Before
     fun setUp() {
         target = ProcessToolUseCaseImpl(
-            mapOf("foo" to toolFoo, "bob" to toolBob),
+            mapOf("foo" to toolFooFactory),
             json
         )
     }
 
     @Test
-    fun `Process without decision`() = runTest {
+    fun `Create new tool`() = runTest {
+        whenever(toolFooFactory.createTool()).doReturn(toolFoo)
+        val testToolCall = mock<ToolCall> {
+            on { toolName } doReturn "foo"
+        }
+        assertEquals(
+            CreateToolResult.Success(toolFoo),
+            target.createTool("MSG_01", testToolCall)
+        )
+    }
+
+    @Test
+    fun `Create new tool failed`() = runTest {
+        whenever(json.encodeToString<Map<String, String>>(any(), any()))
+            .doReturn("{}")
+        val testToolCall = mock<ToolCall> {
+            on { toolName } doReturn "bob"
+        }
+        assertEquals(
+            CreateToolResult.Failure(
+                ToolCallState.Complete(
+                    "MSG_01",
+                    testToolCall,
+                    "{}"
+                )
+            ),
+            target.createTool("MSG_01", testToolCall)
+        )
+    }
+
+    @Test
+    fun `Process new tool call without decision`() = runTest {
+        whenever(toolFoo.labelBeforeStart).doReturn(ToolProcessLabel.RUNNING_TOOL)
+        whenever(toolFoo.labelBeforeDecide).doReturn(ToolProcessLabel.RUNNING_TOOL)
+        whenever(toolFoo.labelBeforeComplete).doReturn(ToolProcessLabel.RUNNING_TOOL)
         whenever(toolFoo.getUserDecision()).doReturn(UserDecision.None)
         whenever(
-            toolFoo.handle(UserDecisionResult.None, "test_call_id", "{}")
+            toolFoo.handle(
+                userDecisionResult = UserDecisionResult.None,
+                toolCallId = "test_call_id",
+                argumentsJson = "{}"
+            )
         ).doReturn("{\"answer\":true}")
         val testToolCall = mock<ToolCall> {
             on { toolCallId } doReturn "test_call_id"
-            on { toolName } doReturn "foo"
             on { argumentsJson } doReturn "{}"
         }
-        val testToolCallState = ToolCallState.Waiting(testToolCall)
-        assertEquals(
-            target.process(listOf(testToolCallState)),
-            listOf(ToolCallState.Complete(testToolCall, "{\"answer\":true}"))
-        )
-    }
 
-    @Test
-    fun `Process with decision result`() = runTest {
-        whenever(toolFoo.getUserDecision()).doReturn(UserDecision.Approve)
-        val testToolCall = mock<ToolCall> {
-            on { toolName } doReturn "foo"
-        }
-        val testToolCallState = ToolCallState.Waiting(testToolCall)
+        val createdState = target.create("MSG_01", toolFoo, testToolCall)
         assertEquals(
-            target.process(listOf(testToolCallState)),
-            listOf(ToolCallState.Deciding(testToolCall, UserDecision.Approve))
+            ToolCallState.Waiting(
+                localMessageId = "MSG_01",
+                toolCall = testToolCall,
+                label = ToolProcessLabel.RUNNING_TOOL
+            ),
+            createdState
         )
-    }
 
-    @Test
-    fun `Process with error by invalid tool`() = runTest {
-        whenever(
-            json.encodeToString(
-                any(),
-                eq(
-                    mapOf(
-                        "reason" to "Could not find tool xxx"
-                    )
-                )
+        target.process(toolFoo, createdState).test {
+            assertEquals(
+                ToolCallState.Running(
+                    localMessageId = "MSG_01",
+                    toolCall = testToolCall,
+                    label = ToolProcessLabel.RUNNING_TOOL,
+                    decisionResult = UserDecisionResult.None
+                ),
+                awaitItem()
             )
-        ).doReturn("{\"reason\": Could not find tool xxx}")
-        val testToolCall = mock<ToolCall> {
-            on { toolName } doReturn "xxx"
-        }
-        val testToolCallState = ToolCallState.Waiting(testToolCall)
-        assertEquals(
-            target.process(listOf(testToolCallState)),
-            listOf(
+            assertEquals(
                 ToolCallState.Complete(
-                    testToolCall,
-                    "{\"reason\": Could not find tool xxx}"
-                )
+                    localMessageId = "MSG_01",
+                    toolCall = testToolCall,
+                    returnContent = "{\"answer\":true}"
+                ),
+                awaitItem()
+            )
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `Process new tool call with decision result`() = runTest {
+        whenever(toolFoo.labelBeforeStart).doReturn(ToolProcessLabel.RUNNING_TOOL)
+        whenever(toolFoo.labelBeforeDecide).doReturn(ToolProcessLabel.RUNNING_TOOL)
+        whenever(toolFoo.getUserDecision()).doReturn(
+            UserDecision.Approve(UserApproveLabel.READ_GAME_DATA)
+        )
+        val testToolCall = mock<ToolCall>()
+        val createdState = target.create("MSG_01", toolFoo, testToolCall)
+        target.process(toolFoo, createdState).test {
+            assertEquals(
+                ToolCallState.Deciding(
+                    localMessageId = "MSG_01",
+                    toolCall = testToolCall,
+                    userDecision = UserDecision.Approve(UserApproveLabel.READ_GAME_DATA),
+                    label = ToolProcessLabel.RUNNING_TOOL
+                ),
+                awaitItem()
+            )
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `Decide user approve`() = runTest {
+        whenever(toolFoo.labelBeforeComplete).doReturn(ToolProcessLabel.RUNNING_TOOL)
+        val testToolCall = mock<ToolCall>()
+        val decidingToolCallState = ToolCallState.Deciding(
+            localMessageId = "MSG_01",
+            toolCall = testToolCall,
+            userDecision = UserDecision.Approve(UserApproveLabel.READ_GAME_DATA),
+            label = ToolProcessLabel.RUNNING_TOOL
+        )
+        assertEquals(
+            ToolCallState.Running(
+                localMessageId = "MSG_01",
+                toolCall = testToolCall,
+                label = ToolProcessLabel.RUNNING_TOOL,
+                decisionResult = UserDecisionResult.Approve(isApproved = true)
+            ),
+            target.decide(
+                toolFoo,
+                decidingToolCallState,
+                UserDecisionResult.Approve(isApproved = true)
             )
         )
+    }
+
+    @Test
+    fun `Process running tool`() = runTest {
+        whenever(
+            toolFoo.handle(
+                userDecisionResult = UserDecisionResult.Approve(isApproved = true),
+                toolCallId = "test_call_id",
+                argumentsJson = "{}"
+            )
+        ).doReturn("{\"answer\":true}")
+        val testToolCall = mock<ToolCall> {
+            on { toolCallId } doReturn "test_call_id"
+            on { argumentsJson } doReturn "{}"
+        }
+
+        val runningState = ToolCallState.Running(
+            localMessageId = "MSG_01",
+            toolCall = testToolCall,
+            label = ToolProcessLabel.RUNNING_TOOL,
+            decisionResult = UserDecisionResult.Approve(isApproved = true)
+        )
+
+        target.process(toolFoo, runningState).test {
+            assertEquals(
+                ToolCallState.Complete(
+                    localMessageId = "MSG_01",
+                    toolCall = testToolCall,
+                    returnContent = "{\"answer\":true}"
+                ),
+                awaitItem()
+            )
+            awaitComplete()
+        }
     }
 }

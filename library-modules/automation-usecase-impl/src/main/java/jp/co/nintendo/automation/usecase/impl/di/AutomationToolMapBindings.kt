@@ -6,8 +6,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import dagger.multibindings.StringKey
-import jp.co.nintendo.automation.usecase.impl.tool.Tool
+import jp.co.nintendo.automation.usecase.impl.tool.ToolFactory
 import jp.co.nintendo.automation.usecase.impl.tool.actual.GetBotInformationTool
+import jp.co.nintendo.automation.usecase.impl.tool.actual.ReadCurrentChessStateTool
 
 /**
  * A tool binding components in automation-impl module
@@ -18,5 +19,10 @@ abstract class AutomationToolMapBindings {
     @Binds
     @IntoMap
     @StringKey(GetBotInformationTool.Companion.TOOL_NAME)
-    abstract fun bindGetBotInformationTool(impl: GetBotInformationTool): Tool
+    abstract fun bindGetBotInformationTool(impl: GetBotInformationTool.Factory): ToolFactory
+
+    @Binds
+    @IntoMap
+    @StringKey(ReadCurrentChessStateTool.Companion.TOOL_NAME)
+    abstract fun bindReadCurrentChessStateTool(impl: ReadCurrentChessStateTool.Factory): ToolFactory
 }

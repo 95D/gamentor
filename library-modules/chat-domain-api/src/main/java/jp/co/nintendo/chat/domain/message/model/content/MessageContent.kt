@@ -26,9 +26,10 @@ data class TextContent(
  * A [MessageContent] representing a request to invoke a tool with specified arguments.
  */
 @Serializable
-@SerialName("tool_request_content")
-data class ToolRequestContent(
-    val toolCalls: List<ToolCall>
+@SerialName("tool_process_content")
+data class ToolProcessContent(
+    val toolCalls: List<ToolCall>,
+    val toolReturns: List<ToolReturn>
 ) : MessageContent {
     @Serializable
     data class ToolCall(
@@ -39,16 +40,7 @@ data class ToolRequestContent(
         @SerialName("argument_json")
         val argumentsJson: String
     )
-}
 
-/**
- * A [MessageContent] representing the result returned from a tool execution.
- */
-@Serializable
-@SerialName("tool_return_content")
-data class ToolResponseContent(
-    val toolReturns: List<ToolReturn>
-) : MessageContent {
     @Serializable
     data class ToolReturn(
         @SerialName("tool_call_id")
@@ -62,4 +54,4 @@ data class ToolResponseContent(
 data class SystemErrorContent(
     @SerialName("error_type")
     val errorType: SystemMessageErrorType
-)
+) : MessageContent

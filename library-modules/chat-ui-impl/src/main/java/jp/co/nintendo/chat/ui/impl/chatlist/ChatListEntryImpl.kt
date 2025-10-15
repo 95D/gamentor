@@ -14,7 +14,6 @@ import jp.co.nintendo.chat.ui.impl.channel.compose.ChatChannelScreen
 import jp.co.nintendo.chat.ui.impl.chatlist.compose.ChatListScreen
 import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatChannelContentKey
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 class ChatListEntryImpl @Inject constructor() : ChatListEntry {
@@ -39,7 +38,6 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                     ChatListScreen(
                         selectedChannelName = selectedContentKey?.displayChannelName,
                         onNavigateToChatChannel = {
-                            Timber.d("Navigate detail page $it")
                             scaffoldNavigator.navigateTo(
                                 ListDetailPaneScaffoldRole.Detail,
                                 it
@@ -51,7 +49,6 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                     )
                 },
                 detailPane = {
-                    Timber.d("Start detail page $selectedContentKey")
                     ChatChannelScreen(
                         selectedContentKey?.channelId.orEmpty(),
                         onBackClicked = {

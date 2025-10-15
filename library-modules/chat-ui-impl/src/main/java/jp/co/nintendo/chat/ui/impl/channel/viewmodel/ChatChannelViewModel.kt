@@ -28,13 +28,13 @@ import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import jp.co.nintendo.chat.domain.message.repository.ChatMessageRepository
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelInputViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelSnackBarViewData
-import jp.co.nintendo.chat.ui.impl.channel.viewmodel.label.ToolLabelProvider
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelViewState
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageProgressViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatProgressIndicateViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageBubbleViewType
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageVisibleLevel
+import jp.co.nintendo.chat.ui.impl.channel.viewmodel.label.ToolLabelProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -50,7 +50,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -138,7 +137,6 @@ class ChatChannelViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             messageExchangeLifecycleStateFlow.collect {
-                Timber.d("Collect message lifecycle $it")
                 if (it is MessageExchangeLifecycle.Done) {
                     mayProcessTool()
                 }
@@ -221,7 +219,6 @@ class ChatChannelViewModel @Inject constructor(
         processToolLifecycle: ProcessToolLifecycle,
         latestMessage: ChatMessage?
     ): ChatProgressIndicateViewData {
-        Timber.d("Next indicator state: $messageExchangeLifecycle, $processToolLifecycle")
         val latestLocalMessageId = latestMessage?.localMessageId
         val processToolIndicateViewData = when (processToolLifecycle) {
             is ProcessToolLifecycle.Done,
@@ -281,22 +278,17 @@ class ChatChannelViewModel @Inject constructor(
 
 
     private suspend fun mayProcessTool() = withContext(Dispatchers.IO) {
-        Timber.d("may process tool")
         if (!isValidChannelId()) {
             return@withContext
         }
-        Timber.d("Channel $channelId")
         val message = chatMessageRepository.selectLatestMessage(channelId)
         if (message == null) {
             return@withContext
         }
-        Timber.d("Message $message")
         val toolRequestMessageContent = message.content as? ToolProcessContent ?: return@withContext
         if (isAlreadyComplete(toolRequestMessageContent)) {
-            Timber.d("Exchange messages")
             exchangeCurrentMessages(channelId)
         } else {
-            Timber.d("Update state")
             processToolStateHolder.mayProcessToolCalls(
                 channelId = channelId,
                 localMessageId = message.localMessageId,
@@ -323,7 +315,6 @@ class ChatChannelViewModel @Inject constructor(
     }
 
     private suspend fun handleProcessToolLifecycle(processToolLifecycle: ProcessToolLifecycle) {
-        Timber.d("Handle process tool life cycle $processToolLifecycle")
         if (!isValidChannelId()) {
             return
         }

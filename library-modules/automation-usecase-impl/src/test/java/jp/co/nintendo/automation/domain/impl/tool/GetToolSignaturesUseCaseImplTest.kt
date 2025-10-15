@@ -1,10 +1,10 @@
 package jp.co.nintendo.automation.domain.impl.tool
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import jp.co.nintendo.automation.usecase.impl.tool.usecase.GetToolSignaturesUseCaseImpl
 import jp.co.nintendo.automation.domain.tool.model.ToolParameterSignature
 import jp.co.nintendo.automation.domain.tool.model.ToolSignature
-import jp.co.nintendo.automation.usecase.impl.tool.Tool
+import jp.co.nintendo.automation.usecase.impl.tool.ToolFactory
+import jp.co.nintendo.automation.usecase.impl.tool.usecase.GetToolSignaturesUseCaseImpl
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -32,10 +32,10 @@ class GetToolSignaturesUseCaseImplTest {
     val mockitoRule: MockitoRule = MockitoJUnit.rule().strictness(Strictness.STRICT_STUBS)
 
     @Mock
-    private lateinit var toolFoo: Tool
+    private lateinit var toolFoo: ToolFactory
 
     @Mock
-    private lateinit var toolBob: Tool
+    private lateinit var toolBob: ToolFactory
 
     @Mock
     private lateinit var json: Json

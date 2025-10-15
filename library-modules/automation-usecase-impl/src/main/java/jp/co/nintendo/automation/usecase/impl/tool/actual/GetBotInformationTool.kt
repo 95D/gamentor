@@ -1,12 +1,15 @@
 package jp.co.nintendo.automation.usecase.impl.tool.actual
 
 import android.util.Log
-import jp.co.nintendo.automation.usecase.impl.di.AutomationDomainCommon
-import jp.co.nintendo.automation.usecase.impl.tool.Tool
 import jp.co.nintendo.automation.domain.tool.model.ToolParameterSignature
+import jp.co.nintendo.automation.domain.tool.model.ToolProcessLabel
 import jp.co.nintendo.automation.domain.tool.model.ToolSignature
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecision
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
+import jp.co.nintendo.automation.usecase.impl.di.AutomationDomainCommon
+import jp.co.nintendo.automation.usecase.impl.tool.Tool
+import jp.co.nintendo.automation.usecase.impl.tool.ToolFactory
+import jp.co.nintendo.automation.usecase.impl.tool.model.ToolCallState
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -15,18 +18,15 @@ import javax.inject.Inject
 /**
  * A [Tool] class for providing bot's information to AI assistant
  */
-class GetBotInformationTool @Inject constructor(
-    @param:AutomationDomainCommon private val json: Json
-) : Tool {
-    override val toolSignature: ToolSignature = ToolSignature(
-        toolName = TOOL_NAME,
-        toolDescription = """
-                Could get bot's information.
-                This information has data to be possible
-                that bot checks about who the bot is and how it can help users.
-            """.trimIndent(),
-        parameters = ToolParameterSignature.EMPTY
-    )
+class GetBotInformationTool(private val json: Json) : Tool {
+    override val labelBeforeStart: ToolProcessLabel
+        get() = ToolProcessLabel.READ_BOT_INFORMATION
+
+    override val labelBeforeDecide: ToolProcessLabel
+        get() = ToolProcessLabel.READ_BOT_INFORMATION
+
+    override val labelBeforeComplete: ToolProcessLabel
+        get() = ToolProcessLabel.READ_BOT_INFORMATION
 
     private val preparedResult: Result = Result(
         name = "Gamentor bot",
@@ -51,12 +51,30 @@ class GetBotInformationTool @Inject constructor(
         }
     }
 
+    override suspend fun cancel(toolCallState: ToolCallState) = Unit
+
     @Serializable
     data class Result(
         val name: String,
         val role: String,
         val coreFunctions: List<String>
     )
+
+    class Factory @Inject constructor(
+        @param:AutomationDomainCommon private val json: Json
+    ) : ToolFactory {
+        override val toolSignature: ToolSignature = ToolSignature(
+            toolName = TOOL_NAME,
+            toolDescription = """
+                Could get bot's information.
+                This information has data to be possible
+                that bot checks about who the bot is and how it can help users.
+            """.trimIndent(),
+            parameters = ToolParameterSignature.EMPTY
+        )
+
+        override fun createTool(): GetBotInformationTool = GetBotInformationTool(json)
+    }
 
     companion object {
         const val TOOL_NAME = "get_bot_information"

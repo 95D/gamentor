@@ -19,9 +19,12 @@ val AccentSkyBlue: Color = Color(0xFF00c3e3)
 val AccentSkyRed: Color = Color(0xFFff4554)
 val DarkGray = Color(0xFF414548)
 
+val Transparent = Color(0x00000000)
+
 val GrayFAAlpha100 = Color(0xFFFAFAFA)
 val GrayF0Alpha100 = Color(0xFFF0F0F0)
 val GrayE6Alpha100 = Color(0xFFE6E6E6)
 val Gray98Alpha100 = Color(0xFF989898)
 val Gray30Alpha100 = Color(0xFF303030)
+val Gray20Alpha72 = Color(0xB8202020)
 val Gray12Alpha100 = Color(0xFF121212)

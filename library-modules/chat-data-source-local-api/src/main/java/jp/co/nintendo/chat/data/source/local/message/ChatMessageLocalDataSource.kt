@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ChatMessageLocalDataSource {
     fun observeLatestMessage(channelId: String): Flow<ChatMessageEntity?>
+    suspend fun selectLatestMessage(channelId: String): ChatMessageEntity?
     suspend fun selectLatestMessages(channelId: String, limit: Int): List<ChatMessageEntity>
     fun selectMessagePagingSource(
         channelId: String,

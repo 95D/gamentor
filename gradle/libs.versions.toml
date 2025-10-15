@@ -37,6 +37,8 @@ compose-bom = "2025.09.01"
 compose-material3 = "1.4.0"
 compose-ui = "1.9.2"
 compose-navgiation = "2.7.0"
+compose-material3-adaptive = "1.2.0-rc01"
+compose-window-size = "1.4.0"
 
 # Timber
 timber = "5.0.1"
@@ -80,6 +82,11 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "compose-navgiation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+compose-material3-adaptive-core = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "compose-material3-adaptive" }
+compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "compose-material3-adaptive" }
+compose-material3-adaptive-navigation = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "compose-material3-adaptive" }
+compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "compose-material3-adaptive" }
+compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "compose-window-size" }
 
 # Room
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
@@ -123,7 +130,7 @@ androidx-paging-testing = { module = "androidx.paging:paging-testing", version.r
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
-mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin"}
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 # Others
@@ -139,11 +146,20 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 
 [bundles]
+adaptive-layout = [
+    "compose-material3-adaptive-core",
+    "compose-material3-adaptive-navigation",
+    "compose-material3-adaptive-layout",
+    "compose-material3-adaptive-navigation-suite",
+    "compose-material3-window-size"
+]
+
 compose = [
     "androidx-compose-runtime",
     "androidx-compose-ui",

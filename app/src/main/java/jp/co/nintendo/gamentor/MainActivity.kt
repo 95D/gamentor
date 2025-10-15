@@ -4,14 +4,16 @@ package jp.co.nintendo.gamentor
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import jp.co.nintendo.design.system.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import jp.co.nintendo.chat.ui.channel.ChatChannelEntry
-import jp.co.nintendo.chat.ui.chatlist.ChatChannelListEntry
+import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
+import jp.co.nintendo.design.system.theme.AppTheme
+import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import javax.inject.Inject
 
 /**
@@ -20,32 +22,30 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var chatChannelEntry: ChatChannelEntry
-
-    @Inject
-    lateinit var chatChannelListEntry: ChatChannelListEntry
+    lateinit var chatListEntry: ChatListEntry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme(isDarkTheme = isSystemInDarkTheme()) {
-                AppNavHost(chatChannelListEntry, chatChannelEntry) }
+                AppNavHost(chatListEntry) }
             }
     }
 }
 
 @Composable
 fun AppNavHost(
-    chatChannelListEntry: ChatChannelListEntry,
-    chatChannelEntry: ChatChannelEntry
+    chatListEntry: ChatListEntry
 ) {
+    val semanticColors = LocalAppSemanticColors.current
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = chatChannelListEntry.route
+        startDestination = chatListEntry.route,
+        modifier = Modifier
+            .background(color = semanticColors.surfacePrimary)
     ) {
-        chatChannelListEntry.attachScreen(this, navController)
-        chatChannelEntry.attachScreen(this, navController)
+        chatListEntry.attachScreen(this, navController)
     }
 }
 

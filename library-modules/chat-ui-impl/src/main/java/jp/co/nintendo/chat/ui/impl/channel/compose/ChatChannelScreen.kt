@@ -170,7 +170,10 @@ fun ChatChannelActiveContentScreen(
         }
         ChatChannelSnackBar(
             viewData = state.snackBar,
-            viewModel::handleUserDecision
+            onConfirmUserDecision = viewModel::handleUserDecision,
+            modifier = Modifier.padding()
+                .navigationBarsPadding()
+                .imePadding()
         )
     }
 }

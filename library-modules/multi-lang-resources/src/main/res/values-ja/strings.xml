@@ -1,3 +1,18 @@
 <resources>
     <string name="welcome">ようこそ！</string>
+    <string name="confirm_yes">はい</string>
+    <string name="confirm_no">いいえ</string>
+    <string name="title_chat_list">トーク</string>
+    <string name="system_error_unknown">エラーが発生しました。</string>
+    <string name="approve_request_to_read_game_data">現在のゲームデータをAIが確認しようとしています。</string>
+    <string name="content_description_back_action">帰る</string>
+    <string name="content_description_unfold">開ける</string>
+    <string name="content_description_fold">閉める</string>
+    <string name="content_description_new_chat">新しいトーク</string>
+    <string name="streaming_tool">適当な道具探し中</string>
+    <string name="progress_tool_running">道具使用中</string>
+    <string name="progress_tool_reading_bot_information">自己PR読み中</string>
+    <string name="progress_tool_preparing">ツール準備中</string>
+    <string name="progress_tool_requesting_user_approve">ユーザの許可を受ける中</string>
+    <string name="progress_tool_reading_game_data">ゲームデータ読み込み中</string>
 </resources>

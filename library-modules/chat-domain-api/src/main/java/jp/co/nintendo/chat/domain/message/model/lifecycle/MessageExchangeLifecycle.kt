@@ -1,5 +1,7 @@
 package jp.co.nintendo.chat.domain.message.model.lifecycle
 
+import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
+
 /**
  * A sealed interface representing life cycle of message exchange task.
  *
@@ -18,7 +20,8 @@ sealed interface MessageExchangeLifecycle {
      * which has text answer
      */
     data class StreamingResponseContent(
-        val content: String
+        val content: String,
+        val senderExtras: MessageSenderExtras
     ) : MessageExchangeLifecycle
 
     /**
@@ -26,12 +29,6 @@ sealed interface MessageExchangeLifecycle {
      * which has tool request
      */
     data object StreamingResponseToolRequest : MessageExchangeLifecycle
-
-    /**
-     * A [MessageExchangeLifecycle] indicating the full response has been finalized and saved.
-     * Represents the successful completion of the response phase.
-     */
-    data class ResponseDone(val responseLocalMessageId: String) : MessageExchangeLifecycle
 
     /**
      * A [MessageExchangeLifecycle] indicating the entire operation is complete

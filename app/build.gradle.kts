@@ -28,6 +28,7 @@ dependencies {
     implementation(libs.bundles.compose)
     debugImplementation(libs.bundles.compose.debug)
     implementation(libs.material)
+    implementation(libs.bundles.adaptive.layout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

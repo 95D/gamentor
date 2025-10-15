@@ -8,9 +8,9 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto
 import jp.co.nintendo.chat.domain.assistant.AiAssistantChatRole
 import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.content.MessageContent
+import jp.co.nintendo.chat.domain.message.model.content.SystemErrorContent
 import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolRequestContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolResponseContent
+import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
 import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
 import jp.co.nintendo.chat.domain.message.model.extras.AppOwnerExtras
 import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
@@ -21,7 +21,7 @@ import javax.inject.Inject
 /**
  * A factory class for creating [AiAssistantExchangeMessageRequest]
  */
-class AiAssistantChatRequestFactory  @Inject constructor(
+class AiAssistantChatRequestFactory @Inject constructor(
     getToolSignaturesUseCase: GetToolSignaturesUseCase
 ) {
     private val toolCatalogDtoList: List<ToolCatalogDto> = getToolSignaturesUseCase
@@ -39,7 +39,7 @@ class AiAssistantChatRequestFactory  @Inject constructor(
 
     private fun createMessageLogDto(message: ChatMessage): List<MessageLogDto> {
         val completionId = getCompletionId(message.senderExtras)
-        val role = getRoleName(message.senderExtras, message.content)
+        val role = getRoleName(message.senderExtras)
         return createMessageLogDto(completionId, role, message.content)
     }
 
@@ -52,7 +52,7 @@ class AiAssistantChatRequestFactory  @Inject constructor(
             MessageLogDto(completionId, role, content = content.rawText)
         )
 
-        is ToolRequestContent -> listOf(
+        is ToolProcessContent -> listOf(
             MessageLogDto(
                 completionId,
                 role,
@@ -60,23 +60,23 @@ class AiAssistantChatRequestFactory  @Inject constructor(
                     this@AiAssistantChatRequestFactory::createToolCallDto
                 ),
             )
-        )
-
-        is ToolResponseContent -> content.toolReturns.map {
+        ) + content.toolReturns.map {
             MessageLogDto(
                 completionId,
-                role,
+                AiAssistantChatRole.TOOL.roleName,
                 toolCallId = it.toolCallId,
                 content = it.content
             )
         }
+
+        is SystemErrorContent -> emptyList()
     }
 
     private fun getCompletionId(senderExtras: MessageSenderExtras): String? =
         (senderExtras as? AiAssistantExtras)?.responseId
 
     private fun createToolCallDto(
-        toolCall: ToolRequestContent.ToolCall
+        toolCall: ToolProcessContent.ToolCall
     ): ToolCallDto = ToolCallDto(
         id = toolCall.toolCallId,
         type = TYPE_NAME_FUNCTION,
@@ -88,13 +88,10 @@ class AiAssistantChatRequestFactory  @Inject constructor(
 
     private fun getRoleName(
         senderExtras: MessageSenderExtras,
-        content: MessageContent
-    ): String = when {
-        content is ToolResponseContent -> AiAssistantChatRole.TOOL
-        senderExtras == SystemExtras -> AiAssistantChatRole.SYSTEM
-        senderExtras == AppOwnerExtras -> AiAssistantChatRole.USER
-        senderExtras is AiAssistantExtras -> AiAssistantChatRole.AI_ASSISTANT
-        else -> AiAssistantChatRole.UNKNOWN
+    ): String = when (senderExtras) {
+        SystemExtras -> AiAssistantChatRole.SYSTEM
+        AppOwnerExtras -> AiAssistantChatRole.USER
+        is AiAssistantExtras -> AiAssistantChatRole.AI_ASSISTANT
     }.roleName
 
     private fun createToolCatalogDto(toolSignatureJson: JsonElement): ToolCatalogDto =

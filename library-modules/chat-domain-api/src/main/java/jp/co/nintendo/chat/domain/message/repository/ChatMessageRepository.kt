@@ -3,6 +3,7 @@ package jp.co.nintendo.chat.domain.message.repository
 import androidx.paging.PagingData
 import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.ChatMessageRequest
+import jp.co.nintendo.chat.domain.message.model.content.MessageContent
 import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecycle
 import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import kotlinx.coroutines.flow.Flow
@@ -12,13 +13,22 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ChatMessageRepository {
     fun observeLatestMessage(channelId: String): Flow<ChatMessage?>
-    suspend fun loadMessagePage(
-        channelId: String,
-        anchor: MessagePageAnchor
-    ): Flow<PagingData<ChatMessage>>
+    suspend fun selectLatestMessage(channelId: String): ChatMessage?
+    suspend fun loadMessagePage(anchor: MessagePageAnchor): Flow<PagingData<ChatMessage>>
+
     suspend fun selectMessage(localMessageId: String): ChatMessage?
+    suspend fun updateMessageContent(
+        channelId: String,
+        localMessageId: String,
+        messageContent: MessageContent
+    ): Boolean
+
     suspend fun exchangeMessage(
         channelId: String,
         messageRequest: ChatMessageRequest
+    ): Flow<MessageExchangeLifecycle>
+
+    suspend fun exchangeCurrentMessages(
+        channelId: String
     ): Flow<MessageExchangeLifecycle>
 }

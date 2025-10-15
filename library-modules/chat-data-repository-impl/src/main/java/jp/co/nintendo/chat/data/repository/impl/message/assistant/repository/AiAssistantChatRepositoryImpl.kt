@@ -13,14 +13,20 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchang
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
 import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.ChatMessageRequest
+import jp.co.nintendo.chat.domain.message.model.content.MessageContent
+import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
+import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
 import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecycle
 import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import jp.co.nintendo.chat.domain.message.repository.ChatMessageRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -33,17 +39,18 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
     private val chatMessageMapper: ChatMessageMapper,
     private val chatMessageEntityFactory: ChatMessageEntityFactory
 ) : ChatMessageRepository {
-
     override fun observeLatestMessage(channelId: String): Flow<ChatMessage?> =
         messageLocalDataSource.observeLatestMessage(channelId).map {
             it?.let { chatMessageMapper.mapToDomain(it) }
         }
 
-    override suspend fun loadMessagePage(
-        channelId: String,
-        anchor: MessagePageAnchor
-    ): Flow<PagingData<ChatMessage>> =
-        loadMessagePage(channelId = channelId, initialKey = getInitialKey(channelId, anchor))
+    override suspend fun selectLatestMessage(channelId: String): ChatMessage? =
+        messageLocalDataSource.selectLatestMessage(channelId)?.let(chatMessageMapper::mapToDomain)
+
+    override suspend fun loadMessagePage(anchor: MessagePageAnchor): Flow<PagingData<ChatMessage>> =
+        withContext(Dispatchers.IO) {
+        loadMessagePage(channelId = anchor.channelId, initialKey = getInitialKey(anchor))
+    }
 
     private fun loadMessagePage(channelId: String, initialKey: Int): Flow<PagingData<ChatMessage>> =
         messageLocalDataSource.selectMessagePagingSource(channelId, initialKey)
@@ -51,49 +58,84 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
 
 
     override suspend fun selectMessage(localMessageId: String): ChatMessage? =
-        messageLocalDataSource.selectMessage(localMessageId)?.let(chatMessageMapper::mapToDomain)
+        withContext(Dispatchers.IO) {
+            messageLocalDataSource.selectMessage(localMessageId)
+                ?.let(chatMessageMapper::mapToDomain)
+        }
 
-    private suspend fun getInitialKey(
+    override suspend fun updateMessageContent(
         channelId: String,
-        anchor: MessagePageAnchor
-    ): Int = when (anchor) {
+        localMessageId: String,
+        messageContent: MessageContent
+    ): Boolean = withContext(Dispatchers.IO) {
+        val currentMessage = messageLocalDataSource.selectMessage(localMessageId)
+            ?.let(chatMessageMapper::mapToDomain) ?: return@withContext false
+        val result = messageLocalDataSource.insert(
+            chatMessageEntityFactory.create(
+                channelId = channelId,
+                message = currentMessage.copy(
+                    content = messageContent
+                )
+            )
+        )
+        when (result) {
+            ChatMessageInsertResult.Failure.FullDisk,
+            ChatMessageInsertResult.Failure.Unknown -> false
+
+            ChatMessageInsertResult.Success -> true
+        }
+    }
+
+    private suspend fun getInitialKey(anchor: MessagePageAnchor): Int = when (anchor) {
         is MessagePageAnchor.Around -> {
             val entity = messageLocalDataSource.selectMessage(anchor.localMessageId)
             if (entity == null) {
                 0
             } else {
                 messageLocalDataSource.countNewerOrEqual(
-                    channelId,
+                    channelId = anchor.channelId,
                     anchorLocalMessageId = entity.localMessageId,
                     anchorCreatedAt = entity.createdAtMillis
                 )
             }
         }
 
-        MessagePageAnchor.Latest -> 0
+        is MessagePageAnchor.Latest -> 0
     }
 
     override suspend fun exchangeMessage(
         channelId: String,
         messageRequest: ChatMessageRequest
-    ): Flow<MessageExchangeLifecycle> = flow {
-        val sentMessageEntity = chatMessageEntityFactory.create(
-            channelId = channelId,
-            content = messageRequest.messageContent,
-            senderExtras = messageRequest.senderExtras
-        )
-        emit(MessageExchangeLifecycle.Sending(sentMessageEntity.localMessageId))
+    ): Flow<MessageExchangeLifecycle> = withContext(Dispatchers.IO) {
+        flow {
+            val sentMessageEntity = chatMessageEntityFactory.create(
+                channelId = channelId,
+                content = messageRequest.messageContent,
+                senderExtras = messageRequest.senderExtras
+            )
+            emit(MessageExchangeLifecycle.Sending(sentMessageEntity.localMessageId))
 
-        val nullableFailure = commitMessage(sentMessageEntity)
-        if (nullableFailure != null) {
-            emit(nullableFailure)
-            return@flow
+            val nullableFailure = commitMessage(sentMessageEntity)
+            if (nullableFailure != null) {
+                emit(nullableFailure)
+                return@flow
+            }
+            exchangeLatestMessages(channelId, flowCollector = this)
         }
+    }
 
+    override suspend fun exchangeCurrentMessages(channelId: String): Flow<MessageExchangeLifecycle> = flow {
+        exchangeLatestMessages(channelId, flowCollector = this)
+    }
+
+    private suspend fun exchangeLatestMessages(
+        channelId: String,
+        flowCollector: FlowCollector<MessageExchangeLifecycle>
+    ) {
         val currentMessages = messageLocalDataSource.selectLatestMessages(channelId, 50)
             .map(chatMessageMapper::mapToDomain)
 
-        emitAll(
+        flowCollector.emitAll(
             aiAssistantChatStreamDataSource.exchangeMessage(
                 aiAssistantChatRequestFactory.create(currentMessages)
             ).transform {
@@ -151,6 +193,7 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
         when (messageLocalDataSource.insert(entity)) {
             ChatMessageInsertResult.Failure.FullDisk,
             ChatMessageInsertResult.Failure.Unknown -> MessageExchangeLifecycle.Failure
+
             ChatMessageInsertResult.Success -> null
         }
 
@@ -161,7 +204,8 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
         return when (firstChoice) {
             is AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot.Content ->
                 MessageExchangeLifecycle.StreamingResponseContent(
-                    firstChoice.assembledContent
+                    content = firstChoice.assembledContent,
+                    senderExtras = AiAssistantExtras(responseId = inProgressResponse.responseId)
                 )
 
             AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot.ToolCall ->

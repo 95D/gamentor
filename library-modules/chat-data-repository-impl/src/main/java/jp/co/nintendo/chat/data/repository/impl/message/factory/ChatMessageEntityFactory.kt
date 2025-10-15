@@ -4,9 +4,10 @@ import jp.co.nintendo.chat.data.repository.impl.di.ChatDataRepositoryCommon
 import jp.co.nintendo.chat.data.repository.impl.time.SystemCurrentMillisCalculator
 import jp.co.nintendo.chat.data.source.local.message.entity.ChatMessageEntity
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
+import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.content.MessageContent
 import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolRequestContent
+import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
 import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
 import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
 import jp.co.nintendo.id.domain.factory.EntityIdFactory
@@ -36,6 +37,17 @@ class ChatMessageEntityFactory @Inject constructor(
             senderExtrasJson = json.encodeToString(senderExtras)
         )
 
+    fun create(
+        channelId: String,
+        message: ChatMessage
+    ): ChatMessageEntity = ChatMessageEntity(
+        localMessageId = message.localMessageId,
+        channelId = channelId,
+        createdAtMillis = message.createdAtMillis,
+        contentJson = json.encodeToString(message.content),
+        senderExtrasJson = json.encodeToString(message.senderExtras)
+    )
+
     fun createAiAssistantResponseMessage(
         channelId: String,
         responseId: String,
@@ -55,14 +67,15 @@ class ChatMessageEntityFactory @Inject constructor(
     ): MessageContent = if (choice.toolCalls.isEmpty()) {
         TextContent(choice.content)
     } else {
-        ToolRequestContent(
-            choice.toolCalls.map {
-                ToolRequestContent.ToolCall(
+        ToolProcessContent(
+            toolCalls = choice.toolCalls.map {
+                ToolProcessContent.ToolCall(
                     it.id,
                     it.function.name,
                     it.function.arguments
                 )
-            }
+            },
+            toolReturns = emptyList()
         )
     }
 }

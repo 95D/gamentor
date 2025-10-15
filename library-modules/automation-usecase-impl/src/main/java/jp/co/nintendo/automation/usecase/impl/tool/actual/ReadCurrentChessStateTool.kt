@@ -96,7 +96,7 @@ class ReadCurrentChessStateTool(private val json: Json) : Tool {
             Returns an array of chess pieces, where each piece has a team, role, and position.
             Example piece: {"team": "white", "role": "king", "position": "E1"}
             
-            Please only invoke it by the command '/read_chess_state'.
+            If a user asks for advice about their game situation, read this data and give advice.
             """.trimIndent(),
             parameters = ToolParameterSignature.EMPTY
         )

@@ -12,6 +12,7 @@ import jp.co.nintendo.chat.data.source.local.message.ChatMessageLocalDataSource
 import jp.co.nintendo.chat.data.source.local.message.entity.ChatMessageEntity
 import jp.co.nintendo.chat.data.source.local.message.model.ChatMessageInsertResult
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,6 +22,17 @@ class ChatMessageLocalDataSourceImpl @Inject constructor(
 ) : ChatMessageLocalDataSource {
     override fun observeLatestMessage(channelId: String): Flow<ChatMessageEntity?> =
         messageDao.observeLatestMessage(channelId).map { it?.let(this::mapToEntity) }
+
+    override suspend fun selectLatestMessage(channelId: String): ChatMessageEntity? {
+        try {
+            val dbentity = messageDao.observeLatestMessage(channelId).first()
+            Timber.d(dbentity.toString())
+            return dbentity?.let(this::mapToEntity)
+        } catch (e: Exception) {
+            Timber.e(e)
+            return null
+        }
+    }
 
     override suspend fun selectLatestMessages(
         channelId: String,

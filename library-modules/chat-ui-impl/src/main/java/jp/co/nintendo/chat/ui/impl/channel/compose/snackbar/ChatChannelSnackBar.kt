@@ -23,9 +23,13 @@ import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 @Composable
 fun ChatChannelSnackBar(
     viewData: ChatChannelSnackBarViewData,
-    onConfirmUserDecision: (UserDecisionResult) -> Unit
+    onConfirmUserDecision: (UserDecisionResult) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    NdsSnackBar(isVisible = viewData !is ChatChannelSnackBarViewData.None) {
+    NdsSnackBar(
+        isVisible = viewData !is ChatChannelSnackBarViewData.None,
+        modifier = modifier
+    ) {
         ChatChannelSnackBarContent(viewData, onConfirmUserDecision)
     }
 }

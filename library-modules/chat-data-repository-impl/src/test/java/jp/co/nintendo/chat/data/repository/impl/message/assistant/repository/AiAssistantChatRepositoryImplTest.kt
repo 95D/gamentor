@@ -18,6 +18,7 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
 import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.ChatMessageRequest
 import jp.co.nintendo.chat.domain.message.model.content.MessageContent
+import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
 import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
 import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecycle
 import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
@@ -88,6 +89,19 @@ class AiAssistantChatRepositoryImplTest {
     }
 
     @Test
+    fun `Select latest message`() = runTest {
+        val mockMessageEntity = mock<ChatMessageEntity>()
+        whenever(messageLocalDataSource.selectLatestMessage("channelId"))
+            .doReturn(mockMessageEntity)
+
+        val mockMessage = mock<ChatMessage>()
+        whenever(chatMessageMapper.mapToDomain(mockMessageEntity))
+            .doReturn(mockMessage)
+        val actual = target.selectLatestMessage("channelId")
+        assertEquals(mockMessage, actual)
+    }
+
+    @Test
     fun `Load latest message page`() = runTest {
         val mockMessageEntity = mock<ChatMessageEntity>()
         val pagingData = PagingData.from(listOf(mockMessageEntity))
@@ -96,7 +110,7 @@ class AiAssistantChatRepositoryImplTest {
         val mockMessage = mock<ChatMessage>()
         whenever(chatMessageMapper.mapToDomain(mockMessageEntity))
             .doReturn(mockMessage)
-        val actualList = target.loadMessagePage("channelId", MessagePageAnchor.Latest).asSnapshot()
+        val actualList = target.loadMessagePage(MessagePageAnchor.Latest("channelId")).asSnapshot()
         assertEquals(1, actualList.size)
         assertEquals(mockMessage, actualList.first())
     }
@@ -127,8 +141,7 @@ class AiAssistantChatRepositoryImplTest {
         whenever(chatMessageMapper.mapToDomain(mockMessageEntity))
             .doReturn(mockMessage)
         val actualList = target.loadMessagePage(
-            "channelId",
-            anchor = MessagePageAnchor.Around("MSG_100")
+            anchor = MessagePageAnchor.Around(channelId = "channelId", localMessageId = "MSG_100")
         ).asSnapshot()
         assertEquals(1, actualList.size)
         assertEquals(mockMessage, actualList.first())
@@ -352,12 +365,18 @@ class AiAssistantChatRepositoryImplTest {
             )
 
             assertEquals(
-                MessageExchangeLifecycle.StreamingResponseContent(content = "He"),
+                MessageExchangeLifecycle.StreamingResponseContent(
+                    content = "He",
+                    senderExtras = AiAssistantExtras(responseId = "response_01")
+                ),
                 awaitItem()
             )
 
             assertEquals(
-                MessageExchangeLifecycle.StreamingResponseContent(content = "Hell"),
+                MessageExchangeLifecycle.StreamingResponseContent(
+                    content = "Hell",
+                    senderExtras = AiAssistantExtras(responseId = "response_01")
+                ),
                 awaitItem()
             )
 

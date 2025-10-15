@@ -7,7 +7,7 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.domain.message.model.content.MessageContent
 import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolRequestContent
+import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
 import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
 import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
 import jp.co.nintendo.id.domain.factory.EntityIdFactory
@@ -136,14 +136,15 @@ class ChatMessageEntityFactoryTest {
             json.encodeToString(
                 any(),
                 eq(
-                    ToolRequestContent(
+                    ToolProcessContent(
                         toolCalls = listOf(
-                            ToolRequestContent.ToolCall(
+                            ToolProcessContent.ToolCall(
                                 toolCallId = "test_call_01",
                                 toolName = "foo",
                                 argumentsJson = "{}"
                             )
-                        )
+                        ),
+                        toolReturns = emptyList()
                     )
                 )
             )

@@ -7,8 +7,7 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto
 import jp.co.nintendo.chat.domain.message.model.ChatMessage
 import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolRequestContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolResponseContent
+import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
 import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
 import jp.co.nintendo.chat.domain.message.model.extras.AppOwnerExtras
 import kotlinx.serialization.json.JsonElement
@@ -64,29 +63,24 @@ class AiAssistantChatRequestFactoryTest {
 
         val mockMessage2 = mock<ChatMessage> {
             on { senderExtras } doReturn AiAssistantExtras(responseId = "response_01")
-            on { content } doReturn ToolRequestContent(
+            on { content } doReturn ToolProcessContent(
                 toolCalls = listOf(
-                    ToolRequestContent.ToolCall(
+                    ToolProcessContent.ToolCall(
                         toolCallId = "test_call_01",
                         toolName = "foo",
                         argumentsJson = "{}"
                     )
-                )
-            )
-        }
-
-        val mockMessage3 = mock<ChatMessage> {
-            on { senderExtras } doReturn AppOwnerExtras
-            on { content } doReturn ToolResponseContent(
+                ),
                 toolReturns = listOf(
-                    ToolResponseContent.ToolReturn(
+                    ToolProcessContent.ToolReturn(
                         toolCallId = "test_call_01",
                         content = "{\"result\":true}"
                     )
                 )
             )
         }
-        val actual = target.create(listOf(mockMessage1, mockMessage2, mockMessage3))
+
+        val actual = target.create(listOf(mockMessage1, mockMessage2))
 
         // Tool assertion
 
@@ -133,16 +127,6 @@ class AiAssistantChatRequestFactoryTest {
                 )
             ),
             actual.messages[1]
-        )
-
-        assertEquals(
-            MessageLogDto(
-                completionId = null,
-                role = "tool",
-                toolCallId = "test_call_01",
-                content = "{\"result\":true}"
-            ),
-            actual.messages[2]
         )
     }
 }

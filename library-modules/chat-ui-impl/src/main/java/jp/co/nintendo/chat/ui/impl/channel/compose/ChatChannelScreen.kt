@@ -97,10 +97,8 @@ fun ChatChannelPlaceholderScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .navigationBarsPadding()
-                .imePadding(),
-            verticalArrangement = Arrangement.Center
+                .imePadding()
         ) {
-            Text(text = "Empty", textAlign = TextAlign.Center, modifier = modifier.fillMaxSize())
         }
     }
 }

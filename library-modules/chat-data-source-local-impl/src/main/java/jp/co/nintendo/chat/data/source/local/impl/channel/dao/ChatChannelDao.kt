@@ -15,7 +15,7 @@ interface ChatChannelDao {
     @Query(
         """
         SELECT * FROM chat_channels
-        ORDER BY channelId DESC 
+        ORDER BY displayName DESC 
     """
     )
     fun selectChannelPagingSource(): PagingSource<Int, ChatChannelDbEntity>

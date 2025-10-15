@@ -1,6 +1,7 @@
 package jp.co.nintendo.automation.domain.tool.stateholder
 
 import jp.co.nintendo.automation.domain.tool.model.ToolCall
+import jp.co.nintendo.automation.domain.tool.model.ToolReturn
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
 import jp.co.nintendo.automation.domain.tool.model.lifecycle.ProcessToolLifecycle
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,13 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ProcessToolStateHolder {
     val processToolLifecycleStateFlow: Flow<ProcessToolLifecycle>
-    suspend fun mayProcessToolCalls(channelId: String, toolCalls: List<ToolCall>)
+    suspend fun mayProcessToolCalls(
+        channelId: String,
+        localMessageId: String,
+        toolCalls: List<ToolCall>,
+        toolReturns: List<ToolReturn>
+    )
+
     suspend fun mayHandleUserDecision(result: UserDecisionResult)
+    suspend fun finishTool(isCommitSuccess: Boolean)
 }

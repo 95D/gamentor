@@ -12,5 +12,5 @@ sealed interface UserDecision {
     /**
      * A [UserDecision] representing user's approve of tool progress
      */
-    data object Approve : UserDecision
+    data class Approve(val label: UserApproveLabel) : UserDecision
 }

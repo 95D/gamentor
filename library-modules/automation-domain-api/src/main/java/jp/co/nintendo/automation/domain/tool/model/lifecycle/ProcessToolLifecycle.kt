@@ -1,5 +1,6 @@
 package jp.co.nintendo.automation.domain.tool.model.lifecycle
 
+import jp.co.nintendo.automation.domain.tool.model.ToolProcessLabel
 import jp.co.nintendo.automation.domain.tool.model.ToolReturn
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecision
 
@@ -11,17 +12,23 @@ import jp.co.nintendo.automation.domain.tool.model.decision.UserDecision
 sealed interface ProcessToolLifecycle {
     data object Idle : ProcessToolLifecycle
     /**
-     * A [ProcessToolLifecycle] indicating the system is executing the required tool
+     * A [ProcessToolLifecycle] indicating the system is executing the required tool before decision
      */
-    data class ProcessingTool(val toolName: String): ProcessToolLifecycle
+    data class Process(val label: ToolProcessLabel): ProcessToolLifecycle
 
     /**
      * A [ProcessToolLifecycle] signaling that user input is required to proceed
      */
-    data class UserDecisionRequested(val userDecision: UserDecision) : ProcessToolLifecycle
+    data class BlockedByUserDecision(
+        val label: ToolProcessLabel,
+        val userDecision: UserDecision
+    ) : ProcessToolLifecycle
 
     /**
      * A [ProcessToolLifecycle] indicating the entire operation is complete
      */
-    data class Done(val returns: List<ToolReturn>) : ProcessToolLifecycle
+    data class Done(
+        val localMessageId: String,
+        val toolReturn: ToolReturn
+    ) : ProcessToolLifecycle
 }

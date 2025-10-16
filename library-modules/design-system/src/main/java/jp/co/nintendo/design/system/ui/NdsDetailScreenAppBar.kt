@@ -11,6 +11,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import jp.co.nintendo.design.system.theme.AppTheme
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 
@@ -25,25 +27,32 @@ fun NdsDetailScreenAppBar(
     val semanticColors = LocalAppSemanticColors.current
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = semanticColors.header,
-            titleContentColor = semanticColors.headerText
-        ),
-        title = {
-            if (!isExpandedScreen) {
-                Text(title)
+        containerColor = semanticColors.header, titleContentColor = semanticColors.headerText
+    ), title = {
+        if (!isExpandedScreen) {
+            Text(title)
+        }
+    }, navigationIcon = {
+        if (!isExpandedScreen) {
+            IconButton(onClick = onBackClicked) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = stringResource(MultiLangR.string.content_description_back_action)
+                )
             }
-        },
-        navigationIcon = {
-            if (!isExpandedScreen) {
-                IconButton(onClick = onBackClicked) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription =
-                            stringResource(MultiLangR.string.content_description_back_action)
-                    )
-                }
-            }
-        },
-        actions = actions
+        }
+    }, actions = actions
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNdsDetailScreenAppBar() {
+    AppTheme(isDarkTheme = false) {
+        NdsDetailScreenAppBar(
+            isExpandedScreen = false,
+            title = "Test app bar",
+            onBackClicked = { /* Do nothing */ },
+        )
+    }
 }

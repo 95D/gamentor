@@ -20,7 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.nintendo.design.system.theme.AppTheme
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 
@@ -64,6 +67,22 @@ fun NdsExpandableText(
         if (isExpanded) {
             Spacer(modifier = Modifier.height(12.dp))
             content()
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNdsExpandableText() {
+    AppTheme(isDarkTheme = false) {
+        val semanticColors = LocalAppSemanticColors.current
+        NdsExpandableText(text = "Test expandable text") {
+            Text(
+                text = "Snack bar test",
+                fontWeight = FontWeight.Bold,
+                color = semanticColors.textDefault,
+                modifier = Modifier
+            )
         }
     }
 }

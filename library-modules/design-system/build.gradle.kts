@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.bundles.compose)
+    implementation(libs.bundles.compose.debug)
     implementation(libs.bundles.adaptive.layout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

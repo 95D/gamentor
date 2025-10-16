@@ -17,6 +17,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import jp.co.nintendo.design.system.theme.AppTheme
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 
@@ -61,4 +63,16 @@ fun NdsListScreenAppBar(
             }
         }
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNdsListScreenAppBar() {
+    AppTheme(isDarkTheme = false) {
+        NdsListScreenAppBar(
+            title = "Test app bar",
+            onBackClicked = { /* Do nothing */ },
+            isDetailSelected = false
+        )
+    }
 }

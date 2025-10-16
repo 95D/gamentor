@@ -26,15 +26,19 @@ import jp.co.nintendo.chat.domain.message.model.extras.SystemExtras
 import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecycle
 import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import jp.co.nintendo.chat.domain.message.repository.ChatMessageRepository
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelBottomSheetType
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelInputViewData
-import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
-import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelViewState
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelScreenViewState
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageProgressViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatProgressIndicateViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageBubbleViewType
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageVisibleLevel
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewmodel.label.ToolLabelProvider
+import jp.co.nintendo.chat.ui.impl.channel.compose.ChatChannelScreen
+import jp.co.nintendo.chat.ui.impl.context.viewdata.ChatContextActionType
+import jp.co.nintendo.chat.ui.impl.context.viewdata.message.MessageContextViewData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -55,6 +59,9 @@ import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
 
+/**
+ * A view model mediating state of [ChatChannelScreen]
+ */
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class ChatChannelViewModel @Inject constructor(
@@ -108,22 +115,31 @@ class ChatChannelViewModel @Inject constructor(
                 initialValue = PagingData.empty()
             )
 
-    val channelViewStateFlow: StateFlow<ChatChannelViewState> = combine(
+    private val messageContextViewDataMutableStateFlow: MutableStateFlow<MessageContextViewData> =
+        MutableStateFlow(MessageContextViewData.None)
+
+    val channelScreenViewStateFlow: StateFlow<ChatChannelScreenViewState> = combine(
         channelIdStateFlow,
         messageExchangeLifecycleStateFlow,
         processToolStateHolder.processToolLifecycleStateFlow,
+        messageContextViewDataMutableStateFlow,
         latestMessageFlow
-    ) { channelId, messageExchangeLifecycle, processToolLifecycle, latestMessage ->
-        getChatChannelViewState(
+    ) { channelId,
+        messageExchangeLifecycle,
+        processToolLifecycle,
+        messageContextViewData,
+        latestMessage ->
+        getChatChannelScreenViewState(
             channelId,
             messageExchangeLifecycle,
             processToolLifecycle,
+            messageContextViewData,
             latestMessage
         )
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
-        initialValue = ChatChannelViewState.Initializing
+        initialValue = ChatChannelScreenViewState.Initializing
     )
 
     var messagingCycleJob: Job? = null
@@ -153,14 +169,15 @@ class ChatChannelViewModel @Inject constructor(
 
     private fun isValidChannelId(): Boolean = channelId.isNotBlank()
 
-    private fun getChatChannelViewState(
+    private fun getChatChannelScreenViewState(
         channelId: String,
         messageExchangeLifecycle: MessageExchangeLifecycle,
         processToolLifecycle: ProcessToolLifecycle,
+        messageContextViewData: MessageContextViewData,
         latestMessage: ChatMessage?
-    ): ChatChannelViewState {
+    ): ChatChannelScreenViewState {
         if (channelId.isBlank()) {
-            return ChatChannelViewState.Invalid
+            return ChatChannelScreenViewState.Invalid
         }
         val userDecision = (processToolLifecycle as? ProcessToolLifecycle.BlockedByUserDecision)
             ?.userDecision ?: UserDecision.None
@@ -174,12 +191,28 @@ class ChatChannelViewModel @Inject constructor(
             progressIndicateViewData = progressIndicateViewData
         )
 
-        return ChatChannelViewState.Active(
-            snackBar = getCurrentSnackBarViewData(userDecision),
-            userDecision = userDecision,
+        val userDecisionViewData = getCurrentSnackBarViewData(userDecision)
+        val bottomSheetType = selectBottomSheetType(userDecisionViewData, messageContextViewData)
+        return ChatChannelScreenViewState.Active(
+            bottomSheetType = bottomSheetType,
+            userDecisionViewData = userDecisionViewData,
             progressIndicateViewData = progressIndicateViewData,
-            inputViewData = inputViewData
+            inputViewData = inputViewData,
+            messageContextViewData = messageContextViewData
         )
+    }
+
+    private fun selectBottomSheetType(
+        userDecisionViewData: UserDecisionViewData,
+        messageContextViewData: MessageContextViewData
+    ): ChatChannelBottomSheetType = when {
+        userDecisionViewData !is UserDecisionViewData.None ->
+            ChatChannelBottomSheetType.USE_DECISION
+
+        messageContextViewData !is MessageContextViewData.None ->
+            ChatChannelBottomSheetType.MESSAGE_CONTEXT
+
+        else -> ChatChannelBottomSheetType.NONE
     }
 
     private fun getCurrentSnackBarViewData(userDecision: UserDecision): UserDecisionViewData {
@@ -373,18 +406,43 @@ class ChatChannelViewModel @Inject constructor(
     }
 
     fun handleInputAction(message: String) {
-        if (message.isBlank()) {
-            return
-        }
-        val inputViewData = (channelViewStateFlow.value as? ChatChannelViewState.Active)
+        val inputViewData = (channelScreenViewStateFlow.value as? ChatChannelScreenViewState.Active)
             ?.inputViewData ?: return
         when (inputViewData) {
             ChatChannelInputViewData.Block -> Unit
             ChatChannelInputViewData.ContinueToolProcess ->
                 viewModelScope.launch { mayProcessTool() }
 
-            ChatChannelInputViewData.SendMessage ->
+            ChatChannelInputViewData.SendMessage -> {
+                if (message.isBlank()) {
+                    return
+                }
                 exchangeAppOwnerMessage(channelId, TextContent(message))
+            }
+        }
+    }
+
+    fun dismissBottomSheet() {
+        val activeViewState = channelScreenViewStateFlow.value as? ChatChannelScreenViewState.Active ?: return
+        when (activeViewState.bottomSheetType) {
+            ChatChannelBottomSheetType.MESSAGE_CONTEXT -> {
+                messageContextViewDataMutableStateFlow.value = MessageContextViewData.None
+            }
+
+            ChatChannelBottomSheetType.USE_DECISION -> handleUserDecisionAsNegative(
+                activeViewState.userDecisionViewData
+            )
+
+            ChatChannelBottomSheetType.NONE -> Unit
+        }
+    }
+
+    private fun handleUserDecisionAsNegative(userDecision: UserDecisionViewData) {
+        when (userDecision) {
+            UserDecisionViewData.None -> Unit
+            is UserDecisionViewData.UserApprove -> handleUserDecision(
+                UserDecisionResult.Approve(isApproved = false)
+            )
         }
     }
 
@@ -394,6 +452,32 @@ class ChatChannelViewModel @Inject constructor(
         }
         viewModelScope.launch(Dispatchers.IO) {
             processToolStateHolder.mayHandleUserDecision(userDecisionResult)
+        }
+    }
+
+    fun openMessageContextActionSuggestion(localMessageId: String) {
+        messageContextViewDataMutableStateFlow.value = MessageContextViewData.SuggestActions(
+            localMessageId = localMessageId,
+            contextActions = ChatContextActionType.entries
+        )
+    }
+
+    fun selectMessageContextAction(chatContextActionType: ChatContextActionType) {
+        if (!isValidChannelId()) {
+            return
+        }
+        val localMessageId =
+            (messageContextViewDataMutableStateFlow.value as? MessageContextViewData.SuggestActions)
+                ?.localMessageId
+        if (localMessageId.isNullOrEmpty()) {
+            return
+        }
+        messageContextViewDataMutableStateFlow.value = MessageContextViewData.None
+        viewModelScope.launch(Dispatchers.IO) {
+            when (chatContextActionType) {
+                ChatContextActionType.DELETE -> chatMessageRepository
+                    .deleteMessage(localMessageId)
+            }
         }
     }
 

@@ -70,9 +70,13 @@ class ReadCurrentChessStateTool(private val json: Json) : Tool {
         toolCallId: String,
         argumentsJson: String
     ): String {
-
+        val isApproved = (userDecisionResult as? UserDecisionResult.Approve)?.isApproved ?: false
         return try {
-            json.encodeToString(chessState)
+            if (isApproved) {
+                json.encodeToString(chessState)
+            } else {
+                createErrorResultJson(CONTENT_VALUE_REASON_REJECT_READ_DATA)
+            }
         } catch (e: SerializationException) {
             createErrorResultJson(reason = e::class.simpleName.orEmpty())
         }
@@ -107,5 +111,9 @@ class ReadCurrentChessStateTool(private val json: Json) : Tool {
     companion object {
         const val TOOL_NAME = "read_current_chess_state"
         private const val CONTENT_KEY_REASON = "reason"
+        private const val CONTENT_VALUE_REASON_REJECT_READ_DATA =
+            "Read operation rejected by user. " +
+                    "Please explain that we need to read data for recommendation to user."
+
     }
 }

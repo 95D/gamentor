@@ -15,4 +15,6 @@
     <string name="progress_tool_reading_game_data">Reading game data..</string>
     <string name="progress_tool_running">Running tool..</string>
     <string name="progress_tool_reading_bot_information">Reading bot information..</string>
+    <string name="channel_context_action_delete">Delete</string>
+    <string name="message_context_action_delete">Delete</string>
 </resources>

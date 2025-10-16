@@ -4,7 +4,7 @@
     <string name="confirm_no">No</string>
     <string name="title_chat_list">Chats</string>
     <string name="system_error_unknown">An error occurred. Please try again.</string>
-    <string name="approve_request_to_read_game_data">AI wants to check the current game data.</string>
+    <string name="approve_request_to_read_game_data">AI wants to check user\'s game data.</string>
     <string name="content_description_back_action">Return</string>
     <string name="content_description_unfold">Unfold</string>
     <string name="content_description_fold">Fold</string>

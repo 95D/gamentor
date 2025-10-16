@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.ui.impl.channel.compose.snackbar
+package jp.co.nintendo.chat.ui.impl.channel.compose.bottomsheet
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,44 +15,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
-import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelSnackBarViewData
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
-import jp.co.nintendo.design.system.ui.NdsSnackBar
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 
 @Composable
-fun ChatChannelSnackBar(
-    viewData: ChatChannelSnackBarViewData,
+fun UserDecisionBottomSheetContent(
+    viewData: UserDecisionViewData,
     onConfirmUserDecision: (UserDecisionResult) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    NdsSnackBar(
-        isVisible = viewData !is ChatChannelSnackBarViewData.None,
-        modifier = modifier
-    ) {
-        ChatChannelSnackBarContent(viewData, onConfirmUserDecision)
-    }
-}
-
-@Composable
-fun ChatChannelSnackBarContent(
-    viewData: ChatChannelSnackBarViewData,
-    onConfirmUserDecision: (UserDecisionResult) -> Unit
-) {
     when (viewData) {
-        ChatChannelSnackBarViewData.None -> Unit
-        is ChatChannelSnackBarViewData.UserApprove -> UserDecisionApprove(
+        UserDecisionViewData.None -> Unit
+        is UserDecisionViewData.UserApprove -> UserApproveView(
             viewData,
-            onConfirmUserDecision
+            onConfirmUserDecision,
+            modifier
         )
     }
 }
 
 @Composable
-fun UserDecisionApprove(
-    viewData: ChatChannelSnackBarViewData.UserApprove,
+private fun UserApproveView(
+    viewData: UserDecisionViewData.UserApprove,
     onConfirmUserDecision: (UserDecisionResult) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     val semanticColors = LocalAppSemanticColors.current
     Column(
@@ -75,7 +62,7 @@ fun UserDecisionApprove(
                 text = stringResource(MultiLangR.string.confirm_yes),
                 color = semanticColors.textAccent,
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(horizontal = 16.dp)
                     .clickable {
                         onConfirmUserDecision(UserDecisionResult.Approve(true))
                     }
@@ -85,7 +72,7 @@ fun UserDecisionApprove(
                 text = stringResource(MultiLangR.string.confirm_no),
                 color = semanticColors.textAccent,
                 modifier = Modifier
-                    .padding(end = 8.dp)
+                    .padding(horizontal = 16.dp)
                     .clickable {
                         onConfirmUserDecision(UserDecisionResult.Approve(false))
                     }

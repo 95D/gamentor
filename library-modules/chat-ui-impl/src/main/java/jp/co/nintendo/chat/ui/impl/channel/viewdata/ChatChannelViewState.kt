@@ -6,7 +6,7 @@ sealed interface ChatChannelViewState {
     data object Initializing : ChatChannelViewState
     data object Invalid : ChatChannelViewState
     data class Active(
-        val snackBar: ChatChannelSnackBarViewData,
+        val snackBar: UserDecisionViewData,
         val userDecision: UserDecision,
         val progressIndicateViewData: ChatProgressIndicateViewData,
         val inputViewData: ChatChannelInputViewData

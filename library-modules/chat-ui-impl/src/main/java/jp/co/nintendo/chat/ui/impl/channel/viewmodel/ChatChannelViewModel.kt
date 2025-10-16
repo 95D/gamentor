@@ -27,7 +27,7 @@ import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecyc
 import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
 import jp.co.nintendo.chat.domain.message.repository.ChatMessageRepository
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelInputViewData
-import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelSnackBarViewData
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelViewState
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageProgressViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatMessageViewData
@@ -182,13 +182,13 @@ class ChatChannelViewModel @Inject constructor(
         )
     }
 
-    private fun getCurrentSnackBarViewData(userDecision: UserDecision): ChatChannelSnackBarViewData {
+    private fun getCurrentSnackBarViewData(userDecision: UserDecision): UserDecisionViewData {
         return when (userDecision) {
-            is UserDecision.Approve -> ChatChannelSnackBarViewData.UserApprove(
+            is UserDecision.Approve -> UserDecisionViewData.UserApprove(
                 title = toolLabelProvider.getUserApproveLabelString(userDecision.label)
             )
 
-            UserDecision.None -> ChatChannelSnackBarViewData.None
+            UserDecision.None -> UserDecisionViewData.None
         }
     }
 

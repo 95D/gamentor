@@ -128,6 +128,10 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
         exchangeLatestMessages(channelId, flowCollector = this)
     }
 
+    override suspend fun deleteMessage(localMessageId: String) {
+        messageLocalDataSource.deleteMessage(localMessageId)
+    }
+
     private suspend fun exchangeLatestMessages(
         channelId: String,
         flowCollector: FlowCollector<MessageExchangeLifecycle>

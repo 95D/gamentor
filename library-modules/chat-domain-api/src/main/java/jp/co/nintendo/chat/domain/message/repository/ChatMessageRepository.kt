@@ -31,4 +31,6 @@ interface ChatMessageRepository {
     suspend fun exchangeCurrentMessages(
         channelId: String
     ): Flow<MessageExchangeLifecycle>
+
+    suspend fun deleteMessage(localMessageId: String)
 }

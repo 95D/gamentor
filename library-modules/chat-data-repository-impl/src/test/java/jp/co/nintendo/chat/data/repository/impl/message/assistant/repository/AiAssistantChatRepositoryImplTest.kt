@@ -34,6 +34,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.mockito.quality.Strictness
 import kotlin.test.assertEquals
@@ -387,5 +388,11 @@ class AiAssistantChatRepositoryImplTest {
 
             awaitComplete()
         }
+    }
+
+    @Test
+    fun `Delete message`() = runTest {
+        target.deleteMessage("MSG_01")
+        verify(messageLocalDataSource).deleteMessage("MSG_01")
     }
 }

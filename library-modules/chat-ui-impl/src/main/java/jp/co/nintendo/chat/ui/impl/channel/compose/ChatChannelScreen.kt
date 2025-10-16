@@ -1,6 +1,6 @@
 package jp.co.nintendo.chat.ui.impl.channel.compose
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,24 +23,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import androidx.window.core.layout.WindowSizeClass
+import jp.co.nintendo.chat.ui.impl.channel.compose.bottomsheet.ChatChannelBottomSheet
 import jp.co.nintendo.chat.ui.impl.channel.compose.progress.ChatProgressIndication
-import jp.co.nintendo.chat.ui.impl.channel.compose.snackbar.ChatChannelSnackBar
+import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelScreenViewState
 import jp.co.nintendo.chat.ui.impl.channel.viewmodel.ChatChannelViewModel
-import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelViewState
 import jp.co.nintendo.design.system.ui.NdsDetailScreenAppBar
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun ChatChannelScreen(
     channelId: String,
     onBackClicked: () -> Unit,
-    viewModel: ChatChannelViewModel = hiltViewModel()
+    chatChannelViewModel: ChatChannelViewModel = hiltViewModel()
 ) {
     val windowAdaptiveInfo = currentWindowAdaptiveInfo()
     val windowSizeClass = windowAdaptiveInfo.windowSizeClass
@@ -50,10 +47,10 @@ fun ChatChannelScreen(
     )
 
     LaunchedEffect(channelId) {
-        viewModel.setCurrentChannelId(channelId)
+        chatChannelViewModel.setCurrentChannelId(channelId)
     }
-    val channelName by viewModel.channelNameFlow.collectAsState("")
-    val viewState by viewModel.channelViewStateFlow.collectAsState()
+    val channelName by chatChannelViewModel.channelNameFlow.collectAsState("")
+    val screenViewState by chatChannelViewModel.channelScreenViewStateFlow.collectAsState()
     Scaffold(
         topBar = {
             NdsDetailScreenAppBar(
@@ -69,24 +66,24 @@ fun ChatChannelScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            ChatChannelScreenContent(viewModel, viewState)
+            ChatChannelScreenContent(chatChannelViewModel, screenViewState)
         }
     }
 }
 
 @Composable
 fun ChatChannelScreenContent(
-    viewModel: ChatChannelViewModel,
-    viewState: ChatChannelViewState
+    chatChannelViewModel: ChatChannelViewModel,
+    screenViewState: ChatChannelScreenViewState
 ) {
-    when (viewState) {
-        is ChatChannelViewState.Active -> ChatChannelActiveContentScreen(
-            viewModel,
-            viewState
+    when (screenViewState) {
+        is ChatChannelScreenViewState.Active -> ChatChannelActiveContentScreen(
+            chatChannelViewModel,
+            screenViewState
         )
 
-        ChatChannelViewState.Initializing -> ChatChannelPlaceholderScreen()
-        ChatChannelViewState.Invalid -> ChatChannelPlaceholderScreen()
+        ChatChannelScreenViewState.Initializing -> ChatChannelPlaceholderScreen()
+        ChatChannelScreenViewState.Invalid -> ChatChannelPlaceholderScreen()
     }
 }
 
@@ -105,11 +102,11 @@ fun ChatChannelPlaceholderScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun ChatChannelActiveContentScreen(
-    viewModel: ChatChannelViewModel,
-    state: ChatChannelViewState.Active,
+    chatChannelViewModel: ChatChannelViewModel,
+    screenViewState: ChatChannelScreenViewState.Active,
     modifier: Modifier = Modifier
 ) {
-    val chatMessageLazyPagingItems = viewModel.chatMessagePagingStateFlow
+    val chatMessageLazyPagingItems = chatChannelViewModel.chatMessagePagingStateFlow
         .collectAsLazyPagingItems()
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()
@@ -117,13 +114,13 @@ fun ChatChannelActiveContentScreen(
 
     var isIncludingLatestMessage by remember { mutableStateOf(false) }
     LaunchedEffect(
-        state.progressIndicateViewData,
+        screenViewState.progressIndicateViewData,
         chatMessageLazyPagingItems.itemCount
     ) {
         val firstVisibleIndex = listState.firstVisibleItemIndex
         val isCloseByIndex = firstVisibleIndex <= 5
         isIncludingLatestMessage = chatMessageLazyPagingItems.itemSnapshotList.items.any {
-            it.localMessageId == state.progressIndicateViewData.latestLocalMessageId
+            it.localMessageId == screenViewState.progressIndicateViewData.latestLocalMessageId
         }
         if (isIncludingLatestMessage && isCloseByIndex) {
             coroutineScope.launch { listState.animateScrollToItem(0) }
@@ -144,7 +141,7 @@ fun ChatChannelActiveContentScreen(
                 state = listState
             ) {
                 item {
-                    ChatProgressIndication(viewData = state.progressIndicateViewData)
+                    ChatProgressIndication(viewData = screenViewState.progressIndicateViewData)
                 }
 
                 items(
@@ -153,27 +150,38 @@ fun ChatChannelActiveContentScreen(
                 ) { index ->
                     val item = chatMessageLazyPagingItems[index]
                     item?.let {
-                        ChatMessageRow(message = it, modifier = Modifier.clickable { })
+                        ChatMessageRow(
+                            message = it,
+                            modifier = Modifier.combinedClickable(
+                                onLongClick = {
+                                    chatChannelViewModel.openMessageContextActionSuggestion(
+                                        it.localMessageId
+                                    )
+                                },
+                                onClick = { /* Do nothing */ }
+                            )
+                        )
                     }
                 }
             }
 
             MessageInputBar(
-                inputViewData = state.inputViewData,
+                inputViewData = screenViewState.inputViewData,
                 userInputText = userInputText,
                 onUserInputChange = { userInputText = it },
                 onClickAction = {
-                    viewModel.handleInputAction(userInputText)
+                    chatChannelViewModel.handleInputAction(userInputText)
                     userInputText = ""
                 }
             )
         }
-        ChatChannelSnackBar(
-            viewData = state.snackBar,
-            onConfirmUserDecision = viewModel::handleUserDecision,
-            modifier = Modifier.padding()
-                .navigationBarsPadding()
-                .imePadding()
+        ChatChannelBottomSheet(
+            bottomSheetType = screenViewState.bottomSheetType,
+            messageContextViewData = screenViewState.messageContextViewData,
+            userDecisionViewData = screenViewState.userDecisionViewData,
+            onDismissBottomSheet = chatChannelViewModel::dismissBottomSheet,
+            onConfirmUserDecision = chatChannelViewModel::handleUserDecision,
+            onSelectMessageContextAction = chatChannelViewModel::selectMessageContextAction
         )
     }
 }

@@ -22,6 +22,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import jp.co.nintendo.chat.ui.impl.chatlist.compose.bottomsheet.ChatListBottomSheet
 import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatChannelContentKey
 import jp.co.nintendo.chat.ui.impl.chatlist.viewmodel.ChatListViewModel
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
@@ -47,7 +50,6 @@ fun ChatListScreen(
     onBackClicked: () -> Unit,
     chatListViewModel: ChatListViewModel = hiltViewModel(),
 ) {
-    val semanticColors = LocalAppSemanticColors.current
     Scaffold(
         topBar = {
             NdsListScreenAppBar(
@@ -74,6 +76,8 @@ fun ChatListScreenContent(
     onNavigateToChatChannel: suspend (ChatChannelContentKey) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val screenViewState by chatListViewModel.chatListScreenViewStateFlow
+        .collectAsState()
     val chatChannelLazyPagingItems =
         chatListViewModel.chatChannelPagingStateFlow
             .collectAsLazyPagingItems()
@@ -81,7 +85,8 @@ fun ChatListScreenContent(
     val coroutineScope = rememberCoroutineScope()
     val semanticColors = LocalAppSemanticColors.current
     Box(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .navigationBarsPadding()
             .imePadding(),
         contentAlignment = Alignment.BottomCenter
@@ -106,6 +111,11 @@ fun ChatListScreenContent(
                                 coroutineScope.launch {
                                     onNavigateToChatChannel(clickedItem)
                                 }
+                            },
+                            onLongClickItem = { clickedItem ->
+                                chatListViewModel.openChannelContextActionSuggestion(
+                                    clickedItem.channelId
+                                )
                             }
                         )
                     }
@@ -137,6 +147,12 @@ fun ChatListScreenContent(
             }
         }
     }
+    ChatListBottomSheet(
+        bottomSheetType = screenViewState.bottomSheetType,
+        channelContextViewData = screenViewState.channelContextViewData,
+        onDismissBottomSheet = chatListViewModel::dismissBottomSheet,
+        onSelectChannelContextAction = chatListViewModel::selectChannelContextAction
+    )
 }
 
 @Preview(showBackground = true)

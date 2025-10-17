@@ -130,9 +130,7 @@ fun ChatChannelActiveContentScreen(
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Top
         ) {
             LazyColumn(

@@ -6,11 +6,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -136,8 +135,7 @@ fun ChatListScreenContent(
                 modifier = Modifier
                     .clip(CircleShape)
                     .background(color = semanticColors.buttonPrimary)
-                    .width(48.dp)
-                    .height(48.dp)
+                    .size(48.dp)
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.Chat,

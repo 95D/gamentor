@@ -4,12 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -121,8 +120,7 @@ fun MessageInputActionButton(
         modifier = modifier
             .clip(CircleShape)
             .background(color = semanticColors.buttonPrimaryText)
-            .width(32.dp)
-            .height(32.dp)
+            .size(32.dp)
     ) {
         Icon(
             imageVector = icon,
@@ -131,8 +129,7 @@ fun MessageInputActionButton(
                 MultiLangR.string.content_description_new_chat
             ),
             modifier = Modifier
-                .width(18.dp)
-                .height(18.dp)
+                .size(18.dp)
         )
     }
 }
@@ -146,8 +143,7 @@ fun MessageInputActionProgress(
         modifier = modifier
             .clip(CircleShape)
             .background(color = semanticColors.buttonPrimaryText)
-            .width(32.dp)
-            .height(32.dp)
+            .size(32.dp)
     )
 }
 

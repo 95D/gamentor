@@ -10,7 +10,8 @@ interface ChatListEntry {
     val route: String
     fun attachScreen(
         navGraphBuilder: NavGraphBuilder,
-        navController: NavController
+        navController: NavController,
+        isExpandedScreen: Boolean
     )
 }
 

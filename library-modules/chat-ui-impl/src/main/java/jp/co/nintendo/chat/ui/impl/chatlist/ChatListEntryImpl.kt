@@ -16,6 +16,9 @@ import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatChannelContentKey
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * An implementation of [ChatListEntry]
+ */
 class ChatListEntryImpl @Inject constructor() : ChatListEntry {
     override val route: String = CHAT_LIST_ROUTE_BASE
     private val arguments: List<NamedNavArgument> = emptyList()
@@ -23,7 +26,8 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     override fun attachScreen(
         navGraphBuilder: NavGraphBuilder,
-        navController: NavController
+        navController: NavController,
+        isExpandedScreen: Boolean
     ) {
         navGraphBuilder.composable(
             route = route,
@@ -36,6 +40,7 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                 scaffoldNavigator,
                 listPane = {
                     ChatListScreen(
+                        isExpandedScreen = isExpandedScreen,
                         selectedChannelName = selectedContentKey?.displayChannelName,
                         onNavigateToChatChannel = {
                             scaffoldNavigator.navigateTo(
@@ -50,7 +55,8 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                 },
                 detailPane = {
                     ChatChannelScreen(
-                        selectedContentKey?.channelId.orEmpty(),
+                        isExpandedScreen = isExpandedScreen,
+                        channelId = selectedContentKey?.channelId.orEmpty(),
                         onBackClicked = {
                             coroutineScope.launch { scaffoldNavigator.navigateBack() }
                         }

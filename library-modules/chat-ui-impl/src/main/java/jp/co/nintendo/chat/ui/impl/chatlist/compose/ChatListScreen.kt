@@ -45,6 +45,7 @@ import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
+    isExpandedScreen: Boolean,
     selectedChannelName: String?,
     onNavigateToChatChannel: suspend (ChatChannelContentKey) -> Unit,
     onBackClicked: () -> Unit,
@@ -53,6 +54,7 @@ fun ChatListScreen(
     Scaffold(
         topBar = {
             NdsListScreenAppBar(
+                isExpandedScreen = isExpandedScreen,
                 title = selectedChannelName ?: stringResource(MultiLangR.string.title_chat_list),
                 onBackClicked = onBackClicked,
                 isDetailSelected = selectedChannelName != null
@@ -160,6 +162,7 @@ fun ChatListScreenContent(
 fun PreviewChatListScreen() {
     MaterialTheme {
         ChatListScreen(
+            isExpandedScreen = false,
             selectedChannelName = null,
             onNavigateToChatChannel = {},
             onBackClicked = {}

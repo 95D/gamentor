@@ -2,14 +2,16 @@ package jp.co.nintendo.gamentor
 
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.window.core.layout.WindowSizeClass
 import dagger.hilt.android.AndroidEntryPoint
 import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
 import jp.co.nintendo.design.system.theme.AppTheme
@@ -20,7 +22,7 @@ import javax.inject.Inject
  * A main activity class for this app
  */
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var chatListEntry: ChatListEntry
 
@@ -28,8 +30,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme(isDarkTheme = isSystemInDarkTheme()) {
-                AppNavHost(chatListEntry) }
+                AppNavHost(chatListEntry)
             }
+        }
     }
 }
 
@@ -39,13 +42,24 @@ fun AppNavHost(
 ) {
     val semanticColors = LocalAppSemanticColors.current
     val navController = rememberNavController()
+
+    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
+    val windowSizeClass = windowAdaptiveInfo.windowSizeClass
+    val isExpandedScreen = windowSizeClass.isWidthAtLeastBreakpoint(
+        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+    )
+
     NavHost(
         navController = navController,
         startDestination = chatListEntry.route,
         modifier = Modifier
             .background(color = semanticColors.surfacePrimary)
     ) {
-        chatListEntry.attachScreen(this, navController)
+        chatListEntry.attachScreen(
+            navGraphBuilder = this,
+            navController = navController,
+            isExpandedScreen = isExpandedScreen
+        )
     }
 }
 

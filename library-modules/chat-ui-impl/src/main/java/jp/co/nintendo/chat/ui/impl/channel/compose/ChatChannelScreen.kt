@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import androidx.window.core.layout.WindowSizeClass
 import jp.co.nintendo.chat.ui.impl.channel.compose.bottomsheet.ChatChannelBottomSheet
 import jp.co.nintendo.chat.ui.impl.channel.compose.progress.ChatProgressIndication
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelScreenViewState
@@ -36,16 +34,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ChatChannelScreen(
+    isExpandedScreen: Boolean,
     channelId: String,
     onBackClicked: () -> Unit,
     chatChannelViewModel: ChatChannelViewModel = hiltViewModel()
 ) {
-    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
-    val windowSizeClass = windowAdaptiveInfo.windowSizeClass
-    val isExpandedScreen = windowSizeClass.isWidthAtLeastBreakpoint(
-        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
-    )
-
     LaunchedEffect(channelId) {
         chatChannelViewModel.setCurrentChannelId(channelId)
     }

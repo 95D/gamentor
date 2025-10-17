@@ -8,6 +8,9 @@ import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
 import jp.co.nintendo.chat.ui.impl.chatlist.ChatListEntryImpl
 import javax.inject.Singleton
 
+/**
+ * A tool binding components in chat-ui-impl module
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ChatUiBindings {

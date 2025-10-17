@@ -10,6 +10,10 @@ import jp.co.nintendo.chat.data.repository.impl.message.assistant.AiAssistantCha
 import jp.co.nintendo.chat.data.repository.message.ChatMessageRepository
 import javax.inject.Singleton
 
+
+/**
+ * A tool binding components in chat-data-repository-impl module
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ChatDataRepositoryBindings {

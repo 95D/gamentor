@@ -41,7 +41,7 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                 listPane = {
                     ChatListScreen(
                         isExpandedScreen = isExpandedScreen,
-                        selectedChannelName = selectedContentKey?.displayChannelName,
+                        selectedChannel = selectedContentKey,
                         onNavigateToChatChannel = {
                             scaffoldNavigator.navigateTo(
                                 ListDetailPaneScaffoldRole.Detail,

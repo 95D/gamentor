@@ -9,17 +9,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatChannelContentKey
+import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 
 @Composable
 fun ChatChannelRow(
     channel: ChatChannelContentKey,
+    isSelected: Boolean,
     onClickItem: (ChatChannelContentKey) -> Unit,
     onLongClickItem: (ChatChannelContentKey) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val semanticColors = LocalAppSemanticColors.current
+    val textColor = if (isSelected) {
+        semanticColors.buttonPrimary
+    } else {
+        semanticColors.textDefault
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = channel.displayChannelName,
+            color = textColor,
             modifier = Modifier
                 .padding(horizontal = 30.dp, vertical = 16.dp)
                 .combinedClickable(

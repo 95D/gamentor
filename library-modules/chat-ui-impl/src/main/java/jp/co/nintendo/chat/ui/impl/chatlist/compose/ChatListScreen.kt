@@ -43,7 +43,7 @@ import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 @Composable
 fun ChatListScreen(
     isExpandedScreen: Boolean,
-    selectedChannelName: String?,
+    selectedChannel: ChatChannelContentKey?,
     onNavigateToChatChannel: suspend (ChatChannelContentKey) -> Unit,
     onBackClicked: () -> Unit,
     chatListViewModel: ChatListViewModel = hiltViewModel(),
@@ -52,9 +52,11 @@ fun ChatListScreen(
         topBar = {
             NdsListScreenAppBar(
                 isExpandedScreen = isExpandedScreen,
-                title = selectedChannelName ?: stringResource(MultiLangR.string.title_chat_list),
+                title = selectedChannel?.displayChannelName ?: stringResource(
+                    MultiLangR.string.title_chat_list
+                ),
                 onBackClicked = onBackClicked,
-                isDetailSelected = selectedChannelName != null
+                isDetailSelected = selectedChannel != null
             )
         },
         contentWindowInsets = WindowInsets(0)
@@ -64,7 +66,7 @@ fun ChatListScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            ChatListScreenContent(chatListViewModel, onNavigateToChatChannel)
+            ChatListScreenContent(chatListViewModel, selectedChannel, onNavigateToChatChannel)
         }
     }
 }
@@ -72,6 +74,7 @@ fun ChatListScreen(
 @Composable
 fun ChatListScreenContent(
     chatListViewModel: ChatListViewModel,
+    selectedChannel: ChatChannelContentKey?,
     onNavigateToChatChannel: suspend (ChatChannelContentKey) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -106,6 +109,7 @@ fun ChatListScreenContent(
                     if (item != null) {
                         ChatChannelRow(
                             channel = item,
+                            isSelected = item == selectedChannel,
                             onClickItem = { clickedItem ->
                                 coroutineScope.launch {
                                     onNavigateToChatChannel(clickedItem)

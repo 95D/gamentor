@@ -1,7 +1,7 @@
-package jp.co.nintendo.chat.domain.channel.repository
+package jp.co.nintendo.chat.data.repository.channel
 
 import androidx.paging.PagingData
-import jp.co.nintendo.chat.domain.channel.model.ChatChannel
+import jp.co.nintendo.chat.model.channel.ChatChannel
 import kotlinx.coroutines.flow.Flow
 
 /**

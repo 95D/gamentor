@@ -1,11 +1,11 @@
-package jp.co.nintendo.chat.domain.message.repository
+package jp.co.nintendo.chat.data.repository.message
 
 import androidx.paging.PagingData
-import jp.co.nintendo.chat.domain.message.model.ChatMessage
-import jp.co.nintendo.chat.domain.message.model.ChatMessageRequest
-import jp.co.nintendo.chat.domain.message.model.content.MessageContent
-import jp.co.nintendo.chat.domain.message.model.lifecycle.MessageExchangeLifecycle
-import jp.co.nintendo.chat.domain.message.model.paging.MessagePageAnchor
+import jp.co.nintendo.chat.model.message.ChatMessage
+import jp.co.nintendo.chat.model.message.ChatMessageRequest
+import jp.co.nintendo.chat.model.message.content.MessageContent
+import jp.co.nintendo.chat.model.message.lifecycle.MessageExchangeLifecycle
+import jp.co.nintendo.chat.model.message.paging.MessagePageAnchor
 import kotlinx.coroutines.flow.Flow
 
 /**

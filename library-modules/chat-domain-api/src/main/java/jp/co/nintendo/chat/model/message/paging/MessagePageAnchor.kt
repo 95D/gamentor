@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.domain.message.model.paging
+package jp.co.nintendo.chat.model.message.paging
 
 /**
  * Anchor data that serves as a reference for messages loaded per page by paging

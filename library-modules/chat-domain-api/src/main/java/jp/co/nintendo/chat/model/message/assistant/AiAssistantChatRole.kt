@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.domain.assistant
+package jp.co.nintendo.chat.model.message.assistant
 
 /**
  * An enum class representing the role in AI assistant chat

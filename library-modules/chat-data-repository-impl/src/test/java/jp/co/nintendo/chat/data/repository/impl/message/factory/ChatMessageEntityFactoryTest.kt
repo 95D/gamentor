@@ -5,11 +5,11 @@ import jp.co.nintendo.chat.data.repository.impl.time.SystemCurrentMillisCalculat
 import jp.co.nintendo.chat.data.source.local.message.entity.ChatMessageEntity
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
-import jp.co.nintendo.chat.domain.message.model.content.MessageContent
-import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
-import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
-import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
+import jp.co.nintendo.chat.model.message.content.MessageContent
+import jp.co.nintendo.chat.model.message.content.TextContent
+import jp.co.nintendo.chat.model.message.content.ToolProcessContent
+import jp.co.nintendo.chat.model.message.extras.AiAssistantExtras
+import jp.co.nintendo.chat.model.message.extras.MessageSenderExtras
 import jp.co.nintendo.id.domain.factory.EntityIdFactory
 import jp.co.nintendo.id.domain.model.DomainCode
 import kotlinx.serialization.json.Json

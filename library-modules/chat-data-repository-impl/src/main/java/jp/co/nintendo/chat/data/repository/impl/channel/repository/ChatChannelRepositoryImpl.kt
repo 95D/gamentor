@@ -3,12 +3,12 @@ package jp.co.nintendo.chat.data.repository.impl.channel.repository
 import androidx.paging.PagingData
 import androidx.paging.map
 import jakarta.inject.Inject
+import jp.co.nintendo.chat.data.repository.channel.ChatChannelRepository
 import jp.co.nintendo.chat.data.repository.impl.channel.factory.ChatChannelEntityFactory
 import jp.co.nintendo.chat.data.repository.impl.channel.mapper.ChatChannelMapper
 import jp.co.nintendo.chat.data.source.local.channel.ChatChannelLocalDataSource
 import jp.co.nintendo.chat.data.source.local.channel.model.ChatChannelInsertResult
-import jp.co.nintendo.chat.domain.channel.model.ChatChannel
-import jp.co.nintendo.chat.domain.channel.repository.ChatChannelRepository
+import jp.co.nintendo.chat.model.channel.ChatChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

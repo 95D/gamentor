@@ -2,7 +2,7 @@ package jp.co.nintendo.chat.data.repository.impl.message.mapper
 
 import jp.co.nintendo.chat.data.repository.impl.di.ChatDataRepositoryCommon
 import jp.co.nintendo.chat.data.source.local.message.entity.ChatMessageEntity
-import jp.co.nintendo.chat.domain.message.model.ChatMessage
+import jp.co.nintendo.chat.model.message.ChatMessage
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 

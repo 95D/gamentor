@@ -5,16 +5,16 @@ import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchang
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.MessageLogDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto
-import jp.co.nintendo.chat.domain.assistant.AiAssistantChatRole
-import jp.co.nintendo.chat.domain.message.model.ChatMessage
-import jp.co.nintendo.chat.domain.message.model.content.MessageContent
-import jp.co.nintendo.chat.domain.message.model.content.SystemErrorContent
-import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
-import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
-import jp.co.nintendo.chat.domain.message.model.extras.AppOwnerExtras
-import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
-import jp.co.nintendo.chat.domain.message.model.extras.SystemExtras
+import jp.co.nintendo.chat.model.message.assistant.AiAssistantChatRole
+import jp.co.nintendo.chat.model.message.ChatMessage
+import jp.co.nintendo.chat.model.message.content.MessageContent
+import jp.co.nintendo.chat.model.message.content.SystemErrorContent
+import jp.co.nintendo.chat.model.message.content.TextContent
+import jp.co.nintendo.chat.model.message.content.ToolProcessContent
+import jp.co.nintendo.chat.model.message.extras.AiAssistantExtras
+import jp.co.nintendo.chat.model.message.extras.AppOwnerExtras
+import jp.co.nintendo.chat.model.message.extras.MessageSenderExtras
+import jp.co.nintendo.chat.model.message.extras.SystemExtras
 import kotlinx.serialization.json.JsonElement
 import javax.inject.Inject
 

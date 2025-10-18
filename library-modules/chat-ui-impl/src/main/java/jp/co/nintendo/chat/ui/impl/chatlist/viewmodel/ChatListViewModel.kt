@@ -6,8 +6,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.co.nintendo.chat.domain.channel.model.ChatChannel
-import jp.co.nintendo.chat.domain.channel.repository.ChatChannelRepository
+import jp.co.nintendo.chat.data.repository.channel.ChatChannelRepository
+import jp.co.nintendo.chat.model.channel.ChatChannel
 import jp.co.nintendo.chat.ui.impl.chatlist.compose.ChatListScreen
 import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatChannelContentKey
 import jp.co.nintendo.chat.ui.impl.chatlist.viewdata.ChatListBottomSheetType

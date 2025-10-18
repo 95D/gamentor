@@ -1,6 +1,6 @@
-package jp.co.nintendo.chat.domain.message.model.lifecycle
+package jp.co.nintendo.chat.model.message.lifecycle
 
-import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
+import jp.co.nintendo.chat.model.message.extras.MessageSenderExtras
 
 /**
  * A sealed interface representing life cycle of message exchange task.

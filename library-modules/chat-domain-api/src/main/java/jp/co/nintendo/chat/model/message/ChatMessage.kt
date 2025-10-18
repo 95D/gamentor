@@ -1,7 +1,7 @@
-package jp.co.nintendo.chat.domain.message.model
+package jp.co.nintendo.chat.model.message
 
-import jp.co.nintendo.chat.domain.message.model.content.MessageContent
-import jp.co.nintendo.chat.domain.message.model.extras.MessageSenderExtras
+import jp.co.nintendo.chat.model.message.content.MessageContent
+import jp.co.nintendo.chat.model.message.extras.MessageSenderExtras
 
 /**
  * A model representing a message in a chat channel

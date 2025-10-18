@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.domain.channel.model
+package jp.co.nintendo.chat.model.channel
 
 /**
  * A model representing chat channel

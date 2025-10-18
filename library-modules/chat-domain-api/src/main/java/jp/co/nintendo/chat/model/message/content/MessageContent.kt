@@ -1,6 +1,6 @@
-package jp.co.nintendo.chat.domain.message.model.content
+package jp.co.nintendo.chat.model.message.content
 
-import jp.co.nintendo.chat.domain.message.model.content.system.SystemMessageErrorType
+import jp.co.nintendo.chat.model.message.content.system.SystemMessageErrorType
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName
 

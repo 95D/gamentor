@@ -5,11 +5,11 @@ import jp.co.nintendo.automation.domain.tool.usecase.GetToolSignaturesUseCase
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.MessageLogDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto
-import jp.co.nintendo.chat.domain.message.model.ChatMessage
-import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
-import jp.co.nintendo.chat.domain.message.model.extras.AiAssistantExtras
-import jp.co.nintendo.chat.domain.message.model.extras.AppOwnerExtras
+import jp.co.nintendo.chat.model.message.ChatMessage
+import jp.co.nintendo.chat.model.message.content.TextContent
+import jp.co.nintendo.chat.model.message.content.ToolProcessContent
+import jp.co.nintendo.chat.model.message.extras.AiAssistantExtras
+import jp.co.nintendo.chat.model.message.extras.AppOwnerExtras
 import kotlinx.serialization.json.JsonElement
 import org.junit.Before
 import org.junit.Rule

@@ -14,10 +14,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import jp.co.nintendo.chat.domain.message.model.content.MessageContent
-import jp.co.nintendo.chat.domain.message.model.content.SystemErrorContent
-import jp.co.nintendo.chat.domain.message.model.content.TextContent
-import jp.co.nintendo.chat.domain.message.model.content.ToolProcessContent
+import jp.co.nintendo.chat.model.message.content.MessageContent
+import jp.co.nintendo.chat.model.message.content.SystemErrorContent
+import jp.co.nintendo.chat.model.message.content.TextContent
+import jp.co.nintendo.chat.model.message.content.ToolProcessContent
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageBubbleViewType
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.MessageVisibleLevel
 import jp.co.nintendo.design.system.colors.SemanticColors

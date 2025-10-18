@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "jp.co.nintendo.chat.domain"
+    namespace = "jp.co.nintendo.chat"
 }
 
 dependencies {

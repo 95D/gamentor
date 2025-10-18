@@ -9,7 +9,7 @@ import jp.co.nintendo.chat.data.repository.impl.channel.repository.ChatChannelRe
 import jp.co.nintendo.chat.data.source.local.channel.ChatChannelLocalDataSource
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
 import jp.co.nintendo.chat.data.source.local.channel.model.ChatChannelInsertResult
-import jp.co.nintendo.chat.domain.channel.model.ChatChannel
+import jp.co.nintendo.chat.model.channel.ChatChannel
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

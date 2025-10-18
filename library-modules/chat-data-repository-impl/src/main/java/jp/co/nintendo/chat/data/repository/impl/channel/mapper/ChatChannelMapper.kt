@@ -1,7 +1,7 @@
 package jp.co.nintendo.chat.data.repository.impl.channel.mapper
 
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
-import jp.co.nintendo.chat.domain.channel.model.ChatChannel
+import jp.co.nintendo.chat.model.channel.ChatChannel
 import javax.inject.Inject
 
 /**

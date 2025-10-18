@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.domain.message.model.extras
+package jp.co.nintendo.chat.model.message.extras
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName

@@ -15,6 +15,9 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
+/**
+ * A [Tool] class for providing current chess game information to AI Assistant
+ */
 class ReadCurrentChessStateTool(private val json: Json) : Tool {
     override val labelBeforeStart: ToolProcessLabel
         get() = ToolProcessLabel.PREPARING_TOOL

@@ -5,7 +5,6 @@ import androidx.paging.testing.asSnapshot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import jp.co.nintendo.chat.data.repository.impl.channel.factory.ChatChannelEntityFactory
 import jp.co.nintendo.chat.data.repository.impl.channel.mapper.ChatChannelMapper
-import jp.co.nintendo.chat.data.repository.impl.channel.repository.ChatChannelRepositoryImpl
 import jp.co.nintendo.chat.data.source.local.channel.ChatChannelLocalDataSource
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
 import jp.co.nintendo.chat.data.source.local.channel.model.ChatChannelInsertResult

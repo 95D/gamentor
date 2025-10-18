@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.data.repository.impl.message.assistant.repository
+package jp.co.nintendo.chat.data.repository.impl.message.assistant
 
 import androidx.paging.PagingData
 import androidx.paging.testing.asSnapshot
@@ -13,7 +13,6 @@ import jp.co.nintendo.chat.data.source.local.message.model.ChatMessageInsertResu
 import jp.co.nintendo.chat.data.source.remote.assistant.AiAssistantChatRemoteDataSource
 import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchangeMessageRequest
 import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchangeMessageResponse
-import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ChoiceDto
 import jp.co.nintendo.chat.model.message.ChatMessage
 import jp.co.nintendo.chat.model.message.ChatMessageRequest
@@ -105,7 +104,7 @@ class AiAssistantChatRepositoryImplTest {
     @Test
     fun `Load latest message page`() = runTest {
         val mockMessageEntity = mock<ChatMessageEntity>()
-        val pagingData = PagingData.from(listOf(mockMessageEntity))
+        val pagingData = PagingData.Companion.from(listOf(mockMessageEntity))
         whenever(messageLocalDataSource.selectMessagePagingSource("channelId", 0))
             .doReturn(flowOf(pagingData))
         val mockMessage = mock<ChatMessage>()
@@ -122,7 +121,7 @@ class AiAssistantChatRepositoryImplTest {
             on { localMessageId } doReturn "MSG_100"
             on { createdAtMillis } doReturn 1000L
         }
-        val pagingData = PagingData.from(listOf(mockMessageEntity))
+        val pagingData = PagingData.Companion.from(listOf(mockMessageEntity))
         whenever(
             messageLocalDataSource.countNewerOrEqual(
                 "channelId",
@@ -241,7 +240,7 @@ class AiAssistantChatRepositoryImplTest {
         val mockProgressResponse = AiAssistantExchangeMessageResponse.InProgress(
             responseId = "response_01",
             choices = listOf(
-                ChoiceAssembleSnapshot.ToolCall
+                AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot.ToolCall
             )
         )
         whenever(aiAssistantChatStreamDataSource.exchangeMessage(mockRequest))
@@ -316,14 +315,14 @@ class AiAssistantChatRepositoryImplTest {
         val progressResponse1 = AiAssistantExchangeMessageResponse.InProgress(
             responseId = "response_01",
             choices = listOf(
-                ChoiceAssembleSnapshot.Content("He")
+                AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot.Content("He")
             )
         )
 
         val progressResponse2 = AiAssistantExchangeMessageResponse.InProgress(
             responseId = "response_01",
             choices = listOf(
-                ChoiceAssembleSnapshot.Content("Hell")
+                AiAssistantExchangeMessageResponse.InProgress.ChoiceAssembleSnapshot.Content("Hell")
             )
         )
 

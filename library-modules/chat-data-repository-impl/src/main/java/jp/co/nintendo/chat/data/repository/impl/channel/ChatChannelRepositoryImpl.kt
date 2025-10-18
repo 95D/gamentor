@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.data.repository.impl.channel.repository
+package jp.co.nintendo.chat.data.repository.impl.channel
 
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /**
- * An implementation of [ChatChannelRepository]
+ * An implementation of [jp.co.nintendo.chat.data.repository.channel.ChatChannelRepository]
  */
 class ChatChannelRepositoryImpl @Inject constructor(
     private val chatChannelLocalDataSource: ChatChannelLocalDataSource,

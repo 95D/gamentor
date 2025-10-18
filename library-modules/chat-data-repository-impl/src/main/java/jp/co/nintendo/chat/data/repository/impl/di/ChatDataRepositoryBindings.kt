@@ -5,8 +5,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.co.nintendo.chat.data.repository.channel.ChatChannelRepository
-import jp.co.nintendo.chat.data.repository.impl.channel.repository.ChatChannelRepositoryImpl
-import jp.co.nintendo.chat.data.repository.impl.message.assistant.repository.AiAssistantChatRepositoryImpl
+import jp.co.nintendo.chat.data.repository.impl.channel.ChatChannelRepositoryImpl
+import jp.co.nintendo.chat.data.repository.impl.message.assistant.AiAssistantChatRepositoryImpl
 import jp.co.nintendo.chat.data.repository.message.ChatMessageRepository
 import javax.inject.Singleton
 

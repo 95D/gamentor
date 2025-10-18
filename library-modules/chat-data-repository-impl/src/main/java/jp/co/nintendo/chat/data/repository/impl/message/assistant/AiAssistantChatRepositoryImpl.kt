@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.data.repository.impl.message.assistant.repository
+package jp.co.nintendo.chat.data.repository.impl.message.assistant
 
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -29,7 +29,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
- * An implementation of [ChatMessageRepository] for AI Assistant chat
+ * An implementation of [jp.co.nintendo.chat.data.repository.message.ChatMessageRepository] for AI Assistant chat
  */
 class AiAssistantChatRepositoryImpl @Inject constructor(
     private val messageLocalDataSource: ChatMessageLocalDataSource,
@@ -48,8 +48,8 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
 
     override suspend fun loadMessagePage(anchor: MessagePageAnchor): Flow<PagingData<ChatMessage>> =
         withContext(Dispatchers.IO) {
-        loadMessagePage(channelId = anchor.channelId, initialKey = getInitialKey(anchor))
-    }
+            loadMessagePage(channelId = anchor.channelId, initialKey = getInitialKey(anchor))
+        }
 
     private fun loadMessagePage(channelId: String, initialKey: Int): Flow<PagingData<ChatMessage>> =
         messageLocalDataSource.selectMessagePagingSource(channelId, initialKey)
@@ -123,9 +123,10 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun exchangeCurrentMessages(channelId: String): Flow<MessageExchangeLifecycle> = flow {
-        exchangeLatestMessages(channelId, flowCollector = this)
-    }
+    override suspend fun exchangeCurrentMessages(channelId: String): Flow<MessageExchangeLifecycle> =
+        flow {
+            exchangeLatestMessages(channelId, flowCollector = this)
+        }
 
     override suspend fun deleteMessage(localMessageId: String) {
         messageLocalDataSource.deleteMessage(localMessageId)

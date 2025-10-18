@@ -1,7 +1,6 @@
-package jp.co.nintendo.chat.data.repository.impl.channel
+package jp.co.nintendo.chat.data.repository.impl.channel.factory
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import jp.co.nintendo.chat.data.repository.impl.channel.factory.ChatChannelEntityFactory
 import jp.co.nintendo.chat.data.repository.impl.time.SystemCurrentMillisCalculator
 import jp.co.nintendo.chat.data.source.local.channel.entity.ChatChannelEntity
 import jp.co.nintendo.id.domain.factory.EntityIdFactory

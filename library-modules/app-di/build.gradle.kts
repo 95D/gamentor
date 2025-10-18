@@ -14,7 +14,7 @@ android {
 
 dependencies {
     implementation(project(":library-modules:chat-ui-impl"))
-    implementation(project(":library-modules:automation-usecase-impl"))
+    implementation(project(":library-modules:automation-business-logic-impl"))
     implementation(project(":library-modules:chat-data-repository-impl"))
     implementation(project(":library-modules:chat-data-source-local-impl"))
     implementation(project(":library-modules:chat-data-source-remote-impl"))

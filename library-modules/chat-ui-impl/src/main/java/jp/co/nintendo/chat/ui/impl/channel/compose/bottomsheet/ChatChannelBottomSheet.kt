@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
+import jp.co.nintendo.automation.model.tool.decision.UserDecisionResult
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.ChatChannelBottomSheetType
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.chat.ui.impl.context.compose.bottomsheet.message.MessageContextBottomSheetContent

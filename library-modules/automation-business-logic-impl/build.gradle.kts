@@ -7,15 +7,18 @@ plugins {
 }
 
 android {
-    namespace = "jp.co.nintendo.automation"
+    namespace = "jp.co.nintendo.automation.business.impl"
 }
 
 dependencies {
+    implementation(project(":library-modules:automation-domain-api"))
     implementation(libs.kotlinx.serialization.json)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    testImplementation(libs.junit)
+    testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

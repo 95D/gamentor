@@ -1,7 +1,7 @@
 package jp.co.nintendo.chat.data.repository.impl.message.assistant.factory
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import jp.co.nintendo.automation.domain.tool.usecase.GetToolSignaturesUseCase
+import jp.co.nintendo.automation.business.tool.usecase.GetToolSignaturesUseCase
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.MessageLogDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import jp.co.nintendo.automation.domain.tool.model.decision.UserDecisionResult
+import jp.co.nintendo.automation.model.tool.decision.UserDecisionResult
 import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR

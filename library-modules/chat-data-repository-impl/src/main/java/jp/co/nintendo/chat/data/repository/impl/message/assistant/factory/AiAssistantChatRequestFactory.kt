@@ -1,12 +1,12 @@
 package jp.co.nintendo.chat.data.repository.impl.message.assistant.factory
 
-import jp.co.nintendo.automation.domain.tool.usecase.GetToolSignaturesUseCase
+import jp.co.nintendo.automation.business.tool.usecase.GetToolSignaturesUseCase
 import jp.co.nintendo.chat.data.source.remote.assistant.model.AiAssistantExchangeMessageRequest
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.MessageLogDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCallDto
 import jp.co.nintendo.chat.data.source.remote.assistant.model.dto.ToolCatalogDto
-import jp.co.nintendo.chat.model.message.assistant.AiAssistantChatRole
 import jp.co.nintendo.chat.model.message.ChatMessage
+import jp.co.nintendo.chat.model.message.assistant.AiAssistantChatRole
 import jp.co.nintendo.chat.model.message.content.MessageContent
 import jp.co.nintendo.chat.model.message.content.SystemErrorContent
 import jp.co.nintendo.chat.model.message.content.TextContent

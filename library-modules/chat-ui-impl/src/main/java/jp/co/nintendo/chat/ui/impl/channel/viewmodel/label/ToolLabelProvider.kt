@@ -1,8 +1,8 @@
 package jp.co.nintendo.chat.ui.impl.channel.viewmodel.label
 
 import androidx.annotation.StringRes
-import jp.co.nintendo.automation.domain.tool.model.ToolProcessLabel
-import jp.co.nintendo.automation.domain.tool.model.decision.UserApproveLabel
+import jp.co.nintendo.automation.model.tool.ToolProcessLabel
+import jp.co.nintendo.automation.model.tool.decision.UserApproveLabel
 import javax.inject.Inject
 import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 

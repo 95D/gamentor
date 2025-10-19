@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementation(project(":library-modules:automation-domain-api"))
+    implementation(project(":library-modules:setting-domain-api"))
     implementation(libs.kotlinx.serialization.json)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)

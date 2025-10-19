@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 /**
- * A provider components in chat-data-repository-impl moudle
+ * A provider components in chat-data-repository-impl module
  */
 @Module
 @InstallIn(SingletonComponent::class)

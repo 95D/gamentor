@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "jp.co.nintendo.chat.ui"
+    namespace = "jp.co.nintendo.chat.ui.entry"
     buildFeatures {
         compose = true
     }

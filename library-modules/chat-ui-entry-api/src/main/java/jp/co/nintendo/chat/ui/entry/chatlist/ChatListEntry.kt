@@ -1,4 +1,4 @@
-package jp.co.nintendo.chat.ui.chatlist
+package jp.co.nintendo.chat.ui.entry.chatlist
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

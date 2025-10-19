@@ -18,6 +18,7 @@ android {
 dependencies {
     implementation(project(":library-modules:chat-ui-api"))
     implementation(project(":library-modules:setting-ui-api"))
+    implementation(project(":library-modules:setting-domain-api"))
     implementation(project(":library-modules:design-system"))
     implementation(project(":library-modules:app-di"))
     ksp(libs.hilt.compiler)

@@ -107,12 +107,12 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
         messageRequest: ChatMessageRequest
     ): Flow<MessageExchangeLifecycle> = withContext(Dispatchers.IO) {
         flow {
+            emit(MessageExchangeLifecycle.Sending)
             val sentMessageEntity = chatMessageEntityFactory.create(
                 channelId = channelId,
                 content = messageRequest.messageContent,
                 senderExtras = messageRequest.senderExtras
             )
-            emit(MessageExchangeLifecycle.Sending(sentMessageEntity.localMessageId))
 
             val nullableFailure = commitMessage(sentMessageEntity)
             if (nullableFailure != null) {
@@ -125,6 +125,7 @@ class AiAssistantChatRepositoryImpl @Inject constructor(
 
     override suspend fun exchangeCurrentMessages(channelId: String): Flow<MessageExchangeLifecycle> =
         flow {
+            emit(MessageExchangeLifecycle.Sending)
             exchangeLatestMessages(channelId, flowCollector = this)
         }
 

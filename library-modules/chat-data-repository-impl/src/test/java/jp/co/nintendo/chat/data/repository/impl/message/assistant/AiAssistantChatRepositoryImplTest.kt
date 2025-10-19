@@ -186,7 +186,7 @@ class AiAssistantChatRepositoryImplTest {
             ChatMessageRequest(mockContent, mockSenderExtras)
         ).test {
             assertEquals(
-                MessageExchangeLifecycle.Sending(sendingLocalMessageId = "MSG_01"),
+                MessageExchangeLifecycle.Sending,
                 awaitItem()
             )
 
@@ -256,7 +256,7 @@ class AiAssistantChatRepositoryImplTest {
             ChatMessageRequest(mockContent, mockSenderExtras)
         ).test {
             assertEquals(
-                MessageExchangeLifecycle.Sending(sendingLocalMessageId = "MSG_01"),
+                MessageExchangeLifecycle.Sending,
                 awaitItem()
             )
 
@@ -360,7 +360,7 @@ class AiAssistantChatRepositoryImplTest {
             ChatMessageRequest(mockContent, mockSenderExtras)
         ).test {
             assertEquals(
-                MessageExchangeLifecycle.Sending(sendingLocalMessageId = "MSG_01"),
+                MessageExchangeLifecycle.Sending,
                 awaitItem()
             )
 

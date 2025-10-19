@@ -10,10 +10,11 @@ import jp.co.nintendo.chat.model.message.extras.MessageSenderExtras
  */
 sealed interface MessageExchangeLifecycle {
     data object Idle : MessageExchangeLifecycle
+
     /**
      * A [MessageExchangeLifecycle] indicating the message is being transmitted to the server
      */
-    data class Sending(val sendingLocalMessageId: String) : MessageExchangeLifecycle
+    data object Sending : MessageExchangeLifecycle
 
     /**
      * A [MessageExchangeLifecycle] indicating a progressive chunk is being received from response

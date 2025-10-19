@@ -1,5 +1,6 @@
 package jp.co.nintendo.setting.model.app
 
+import jp.co.nintendo.setting.model.app.chess.ChessUnit
 import jp.co.nintendo.setting.model.app.theme.AppThemeType
 
 /**
@@ -7,5 +8,6 @@ import jp.co.nintendo.setting.model.app.theme.AppThemeType
  */
 data class AppSettings(
     val appliedThemeType: AppThemeType,
-    val isShownAllMessageBubbles: Boolean
+    val isShownAllMessageBubbles: Boolean,
+    val simulatedChessUnits: List<ChessUnit>
 )

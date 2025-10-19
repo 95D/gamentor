@@ -1,6 +1,7 @@
 package jp.co.nintendo.setting.data.repository.app
 
 import jp.co.nintendo.setting.model.app.AppSettings
+import jp.co.nintendo.setting.model.app.chess.ChessUnit
 import jp.co.nintendo.setting.model.app.theme.AppThemeType
 import kotlinx.coroutines.flow.Flow
 
@@ -13,4 +14,6 @@ interface AppSettingRepository {
     suspend fun updateApplyThemeType(themeType: AppThemeType)
 
     suspend fun updateIsShownAllMessageBubbles(isShown: Boolean)
+
+    suspend fun updateChessSimulation(chessUnits: List<ChessUnit>)
 }

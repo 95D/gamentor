@@ -1,10 +1,6 @@
 package jp.co.nintendo.setting.ui.impl.app.entry
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
-import androidx.compose.material3.adaptive.navigation.NavigableListDetailPaneScaffold
-import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -13,8 +9,7 @@ import jakarta.inject.Inject
 import jp.co.nintendo.setting.ui.entry.AppSettingEntry
 import jp.co.nintendo.setting.ui.impl.app.compose.AppSettingScreen
 import jp.co.nintendo.setting.ui.impl.app.compose.DetailSettingScreen
-import jp.co.nintendo.setting.ui.impl.app.viewdata.AppSettingDetailContentKey
-import kotlinx.coroutines.launch
+import jp.co.nintendo.ui.core.compose.adaptive.AppNavigableListDetailPaneScaffold
 
 /**
  * An implementation of [AppSettingEntry]
@@ -33,33 +28,20 @@ class AppSettingEntryImpl @Inject constructor() : AppSettingEntry {
             route = route,
             arguments = arguments
         ) { backStackEntry ->
-            val coroutineScope = rememberCoroutineScope()
-            val scaffoldNavigator = rememberListDetailPaneScaffoldNavigator<AppSettingDetailContentKey>()
-            val selectedContentKey = scaffoldNavigator.currentDestination?.contentKey
-            NavigableListDetailPaneScaffold(
-                scaffoldNavigator,
+            AppNavigableListDetailPaneScaffold(
                 listPane = {
                     AppSettingScreen(
                         isExpandedScreen = isExpandedScreen,
-                        selectedContentKey = selectedContentKey,
-                        onNavigateToSettingItem = {
-                            scaffoldNavigator.navigateTo(
-                                ListDetailPaneScaffoldRole.Detail,
-                                it
-                            )
-                        },
-                        onBackClicked = {
-                            coroutineScope.launch { scaffoldNavigator.navigateBack() }
-                        }
+                        selectedContentKey = it.selectedContentKey,
+                        onNavigateToSettingItem = it.onNavigateToDetail,
+                        onBackClicked = it.onBack
                     )
                 },
                 detailPane = {
                     DetailSettingScreen(
                         isExpandedScreen = isExpandedScreen,
-                        selectedItem = selectedContentKey,
-                        onBackClicked = {
-                            coroutineScope.launch { scaffoldNavigator.navigateBack() }
-                        }
+                        selectedItem = it.selectedContentKey,
+                        onBackClicked = it.onBack
                     )
                 }
             )

@@ -14,6 +14,6 @@ interface ChatListEntry {
         isExpandedScreen: Boolean
     )
 
-    fun navigate(navController: NavController)
+    fun navigateAsTop(navController: NavController)
 }
 

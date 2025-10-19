@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,7 +30,8 @@ fun NdsListScreenAppBar(
     isExpandedScreen: Boolean,
     title: String,
     onBackClicked: () -> Unit,
-    isDetailSelected: Boolean
+    isDetailSelected: Boolean,
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     val semanticColors = LocalAppSemanticColors.current
     val titleTransitionSpec = remember(isExpandedScreen) {
@@ -47,6 +49,7 @@ fun NdsListScreenAppBar(
                 titleContentColor = semanticColors.headerText
             ),
             title = { Text(targetTitle) },
+            actions = actions,
             navigationIcon = {
                 AnimatedVisibility(
                     visible = isDetailSelected,

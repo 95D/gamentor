@@ -36,5 +36,5 @@
     <string name="theme_sakura">さくら</string>
     <string name="chess_reset_empty">ボードを片付ける</string>
     <string name="chess_reset_standard">基本配置にする</string>
-    <string name="chess_reset_fools_mate">フールズ・メイト既報にする</string>
+    <string name="chess_reset_fools_mate">フールズ・メイト棋譜にする</string>
 </resources>

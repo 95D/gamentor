@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * An implementation pf [ChatChannelLocalDataSource]
+ */
 class ChatChannelLocalDataSourceImpl @Inject constructor(
     private val chatChannelDao: ChatChannelDao
 ) : ChatChannelLocalDataSource {

@@ -4,6 +4,9 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
+/**
+ * A room db entity for chat_messages
+ */
 @Entity(
     tableName = "chat_messages",
     indices = [

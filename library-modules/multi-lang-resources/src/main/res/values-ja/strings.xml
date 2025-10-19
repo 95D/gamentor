@@ -30,7 +30,7 @@
     <string name="locale_default">システムの言語</string>
     <string name="locale_english">英語</string>
     <string name="locale_japanese">日本語</string>
-    <string name="theme_device">>システムの設定</string>
+    <string name="theme_device">システムの設定</string>
     <string name="theme_light">基本（白）</string>
     <string name="theme_dark">基本（黒）</string>
     <string name="theme_sakura">さくら</string>

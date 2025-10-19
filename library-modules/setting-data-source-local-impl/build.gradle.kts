@@ -21,6 +21,8 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.paging)
+    implementation(libs.datastore)
+    implementation(libs.datastore.core)
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.bundles.testing)

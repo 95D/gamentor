@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import jp.co.nintendo.design.system.colors.DarkSemanticColors
 import jp.co.nintendo.design.system.colors.LightSemanticColors
+import jp.co.nintendo.design.system.colors.SemanticColors
 import jp.co.nintendo.design.system.colors.mapToColorScheme
 
 val LocalAppSemanticColors = staticCompositionLocalOf {
@@ -19,9 +20,11 @@ val LocalAppSemanticColors = staticCompositionLocalOf {
 @Composable
 fun AppTheme(
     isDarkTheme: Boolean,
-    content: @Composable () -> Unit
+    userSemanticColors: SemanticColors? = null,
+    content: @Composable () -> Unit = {}
 ) {
-    val semanticColors = if (isDarkTheme) DarkSemanticColors else LightSemanticColors
+    val defaultSemanticColors = if (isDarkTheme) DarkSemanticColors else LightSemanticColors
+    val semanticColors = userSemanticColors ?: defaultSemanticColors
     val materialColorScheme = mapToColorScheme(semanticColors, isDarkTheme)
 
     CompositionLocalProvider(

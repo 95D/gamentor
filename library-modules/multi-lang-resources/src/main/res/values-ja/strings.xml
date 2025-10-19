@@ -17,4 +17,17 @@
     <string name="progress_tool_reading_game_data">ゲームデータ読み込み中</string>
     <string name="channel_context_action_delete">削除</string>
     <string name="message_context_action_delete">削除</string>
+    <string name="setting_app_title">設定</string>
+    <string name="setting_subject_system">システム</string>
+    <string name="setting_subject_advance">高級設定</string>
+    <string name="setting_item_app_language">言語</string>
+    <string name="setting_item_app_theme">着せかえ</string>
+    <string name="setting_item_show_all_messages">すべてのメッセージ表示</string>
+    <string name="locale_default">システムの言語</string>
+    <string name="locale_english">英語</string>
+    <string name="locale_japanese">日本語</string>
+    <string name="theme_device">>システムの設定</string>
+    <string name="theme_light">基本（白）</string>
+    <string name="theme_dark">基本（黒）</string>
+    <string name="theme_sakura">さくら</string>
 </resources>

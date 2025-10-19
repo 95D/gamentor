@@ -17,4 +17,17 @@
     <string name="progress_tool_reading_bot_information">Reading bot information..</string>
     <string name="channel_context_action_delete">Delete</string>
     <string name="message_context_action_delete">Delete</string>
+    <string name="setting_app_title">Setting</string>
+    <string name="setting_subject_system">System</string>
+    <string name="setting_subject_advance">Advance</string>
+    <string name="setting_item_app_language">Language</string>
+    <string name="setting_item_app_theme">Theme</string>
+    <string name="setting_item_show_all_messages">Show all messages</string>
+    <string name="locale_default">Default</string>
+    <string name="locale_english">English</string>
+    <string name="locale_japanese">Japanese</string>
+    <string name="theme_device">Device setting</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_sakura">Sakura</string>
 </resources>

@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import jp.co.nintendo.design.system.ui.NdsDetailScreenAppBar
 import jp.co.nintendo.setting.ui.impl.app.viewdata.AppSettingDetailContentKey
 import jp.co.nintendo.setting.ui.impl.app.viewdata.AppSettingDetailItemType
+import jp.co.nintendo.setting.ui.impl.chess.compose.ChessEditSettingView
 import jp.co.nintendo.setting.ui.impl.language.compose.AppLanguageSettingView
 import jp.co.nintendo.setting.ui.impl.theme.compose.AppThemeSettingView
 
@@ -50,6 +51,7 @@ private fun DetailSettingScreenContent(
     when (selectedItem?.itemType) {
         AppSettingDetailItemType.APP_LANGUAGE -> AppLanguageSettingView(modifier)
         AppSettingDetailItemType.APP_THEME -> AppThemeSettingView(modifier)
+        AppSettingDetailItemType.CHESS_EDIT -> ChessEditSettingView(modifier)
         null -> Unit
     }
 }

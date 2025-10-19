@@ -13,5 +13,6 @@ enum class AppSettingDetailItemType(
     @param:StringRes val settingItemName: Int
 ) : Parcelable {
     APP_LANGUAGE(settingItemName = MultiLangR.string.setting_item_app_language),
-    APP_THEME(settingItemName = MultiLangR.string.setting_item_app_theme)
+    APP_THEME(settingItemName = MultiLangR.string.setting_item_app_theme),
+    CHESS_EDIT(settingItemName = MultiLangR.string.setting_item_edit_chess)
 }

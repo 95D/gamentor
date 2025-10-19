@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.co.nintendo.setting.ui.entry.AppSettingEntry
+import jp.co.nintendo.setting.ui.entry.app.AppSettingEntry
 import jp.co.nintendo.setting.ui.impl.app.entry.AppSettingEntryImpl
 import javax.inject.Singleton
 

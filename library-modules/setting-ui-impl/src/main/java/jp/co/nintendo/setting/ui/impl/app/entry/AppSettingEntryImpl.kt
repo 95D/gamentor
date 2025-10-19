@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import jakarta.inject.Inject
-import jp.co.nintendo.setting.ui.entry.AppSettingEntry
+import jp.co.nintendo.setting.ui.entry.app.AppSettingEntry
 import jp.co.nintendo.setting.ui.impl.app.compose.AppSettingScreen
 import jp.co.nintendo.setting.ui.impl.app.compose.DetailSettingScreen
 import jp.co.nintendo.ui.core.compose.adaptive.AppNavigableListDetailPaneScaffold

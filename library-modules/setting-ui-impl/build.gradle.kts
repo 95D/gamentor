@@ -18,7 +18,7 @@ android {
 
 dependencies {
     implementation(project(":library-modules:ui-core-compose"))
-    implementation(project(":library-modules:setting-ui-api"))
+    implementation(project(":library-modules:setting-ui-entry-api"))
     implementation(project(":library-modules:setting-domain-api"))
     implementation(project(":library-modules:multi-lang-resources"))
     implementation(project(":library-modules:design-system"))

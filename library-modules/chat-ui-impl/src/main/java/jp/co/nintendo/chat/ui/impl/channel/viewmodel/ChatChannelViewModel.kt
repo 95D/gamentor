@@ -60,6 +60,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import jp.co.nintendo.multi.lang.resources.R as MultiLangR
 
 /**
  * A view model mediating state of [ChatChannelScreen]
@@ -268,7 +269,6 @@ class ChatChannelViewModel @Inject constructor(
     ): ChatProgressIndicateViewData {
         val latestLocalMessageId = latestMessage?.localMessageId
         val processToolIndicateViewData = when (processToolLifecycle) {
-            is ProcessToolLifecycle.Done,
             ProcessToolLifecycle.Idle -> ChatProgressIndicateViewData.None(latestLocalMessageId)
 
             is ProcessToolLifecycle.Process ->
@@ -281,6 +281,12 @@ class ChatChannelViewModel @Inject constructor(
                 ChatProgressIndicateViewData.ProcessingTool(
                     latestLocalMessageId,
                     toolLabelProvider.getToolProcessLabelString(processToolLifecycle.label)
+                )
+
+            is ProcessToolLifecycle.Done ->
+                ChatProgressIndicateViewData.ProcessingTool(
+                    latestLocalMessageId = latestLocalMessageId,
+                    toolLabel = MultiLangR.string.progress_tool_committing
                 )
         }
 

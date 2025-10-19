@@ -93,7 +93,7 @@ fun MessageInputAction(
     modifier: Modifier = Modifier
 ) {
     when (inputViewData) {
-        is ChatChannelInputViewData.Block -> MessageInputActionProgress()
+        is ChatChannelInputViewData.Block -> MessageInputActionProgress(modifier)
         is ChatChannelInputViewData.ContinueToolProcess -> MessageInputActionButton(
             inputViewData.icon,
             onClickAction,

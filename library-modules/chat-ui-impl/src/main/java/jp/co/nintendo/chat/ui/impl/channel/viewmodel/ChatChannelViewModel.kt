@@ -4,15 +4,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.co.nintendo.automation.business.tool.stateholder.ProcessToolStateHolder
+import jp.co.nintendo.automation.business.tool.stateholder.factory.ProcessToolStateHolderFactory
 import jp.co.nintendo.automation.model.tool.ToolCall
 import jp.co.nintendo.automation.model.tool.ToolReturn
 import jp.co.nintendo.automation.model.tool.decision.UserDecision
 import jp.co.nintendo.automation.model.tool.decision.UserDecisionResult
 import jp.co.nintendo.automation.model.tool.lifecycle.ProcessToolLifecycle
-import jp.co.nintendo.automation.business.tool.stateholder.ProcessToolStateHolder
-import jp.co.nintendo.automation.business.tool.stateholder.factory.ProcessToolStateHolderFactory
 import jp.co.nintendo.chat.data.repository.channel.ChatChannelRepository
 import jp.co.nintendo.chat.data.repository.message.ChatMessageRepository
 import jp.co.nintendo.chat.model.message.ChatMessage
@@ -39,6 +40,7 @@ import jp.co.nintendo.chat.ui.impl.channel.viewdata.UserDecisionViewData
 import jp.co.nintendo.chat.ui.impl.channel.viewmodel.label.ToolLabelProvider
 import jp.co.nintendo.chat.ui.impl.context.viewdata.ChatContextActionType
 import jp.co.nintendo.chat.ui.impl.context.viewdata.message.MessageContextViewData
+import jp.co.nintendo.setting.data.repository.app.AppSettingRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -67,6 +69,7 @@ import javax.inject.Inject
 class ChatChannelViewModel @Inject constructor(
     private val chatMessageRepository: ChatMessageRepository,
     private val chatChannelRepository: ChatChannelRepository,
+    appSettingRepository: AppSettingRepository,
     private val toolLabelProvider: ToolLabelProvider,
     processToolStateHolderFactory: ProcessToolStateHolderFactory
 ) : ViewModel() {
@@ -104,16 +107,27 @@ class ChatChannelViewModel @Inject constructor(
     val messageExchangeLifecycleStateFlow: StateFlow<MessageExchangeLifecycle> =
         messageExchangeLifecycleMutableStateFlow.asStateFlow()
 
-    val chatMessagePagingStateFlow: StateFlow<PagingData<ChatMessageViewData>> =
+    private val chatMessagePagingStateFlow: Flow<PagingData<ChatMessage>> =
         messagePageAnchorMutableStateFlow.flatMapLatest { anchor ->
             chatMessageRepository.loadMessagePage(anchor)
-                .map { paging -> paging.map { it.toViewdata() } }
         }.cachedIn(viewModelScope)
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = PagingData.empty()
-            )
+
+    val chatMessageViewDataPagingStateFlow: StateFlow<PagingData<ChatMessageViewData>> =
+        combine(
+            chatMessagePagingStateFlow,
+            appSettingRepository.appSettingsFlow
+        ) { paging, settings ->
+            paging.filter {
+                isVisibleMessage(
+                    it.content,
+                    settings.isShownAllMessageBubbles
+                )
+            }.map { it.toViewdata() }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = PagingData.empty()
+        )
 
     private val messageContextViewDataMutableStateFlow: MutableStateFlow<MessageContextViewData> =
         MutableStateFlow(MessageContextViewData.None)
@@ -480,6 +494,9 @@ class ChatChannelViewModel @Inject constructor(
             }
         }
     }
+
+    private fun isVisibleMessage(content: MessageContent, isShownAllMessages: Boolean): Boolean =
+        isShownAllMessages || getVisibleLevel(content) == MessageVisibleLevel.User
 
     private fun getVisibleLevel(content: MessageContent): MessageVisibleLevel = when (content) {
         is ToolProcessContent -> MessageVisibleLevel.Developer

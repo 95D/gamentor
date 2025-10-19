@@ -99,7 +99,7 @@ fun ChatChannelActiveContentScreen(
     screenViewState: ChatChannelScreenViewState.Active,
     modifier: Modifier = Modifier
 ) {
-    val chatMessageLazyPagingItems = chatChannelViewModel.chatMessagePagingStateFlow
+    val chatMessageLazyPagingItems = chatChannelViewModel.chatMessageViewDataPagingStateFlow
         .collectAsLazyPagingItems()
     val coroutineScope = rememberCoroutineScope()
     val listState = rememberLazyListState()

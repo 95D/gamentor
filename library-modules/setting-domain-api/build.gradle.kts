@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "jp.co.nintendo.setting.domain"
+    namespace = "jp.co.nintendo.setting"
 }
 
 dependencies {

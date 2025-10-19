@@ -1,5 +1,7 @@
 <resources>
     <string name="welcome">Welcome!</string>
+    <string name="navigation_suite_home">Home</string>
+    <string name="navigation_suite_setting">Setting</string>
     <string name="confirm_yes">Yes</string>
     <string name="confirm_no">No</string>
     <string name="title_chat_list">Chats</string>

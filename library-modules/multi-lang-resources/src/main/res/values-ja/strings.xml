@@ -1,5 +1,7 @@
 <resources>
     <string name="welcome">ようこそ！</string>
+    <string name="navigation_suite_home">ホーム</string>
+    <string name="navigation_suite_setting">設定</string>
     <string name="confirm_yes">はい</string>
     <string name="confirm_no">いいえ</string>
     <string name="title_chat_list">トーク</string>

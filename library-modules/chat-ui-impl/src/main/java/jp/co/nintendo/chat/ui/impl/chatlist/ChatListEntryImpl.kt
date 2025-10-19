@@ -66,6 +66,10 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
         }
     }
 
+    override fun navigate(navController: NavController) {
+        navController.navigate(route)
+    }
+
     private companion object {
         const val CHAT_LIST_ROUTE_BASE = "chat_list"
     }

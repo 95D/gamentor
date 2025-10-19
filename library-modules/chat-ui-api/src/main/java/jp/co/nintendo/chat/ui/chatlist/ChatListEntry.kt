@@ -13,5 +13,7 @@ interface ChatListEntry {
         navController: NavController,
         isExpandedScreen: Boolean
     )
+
+    fun navigate(navController: NavController)
 }
 

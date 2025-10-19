@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
-import jp.co.nintendo.chat.ui.impl.chatlist.ChatListEntryImpl
+import jp.co.nintendo.chat.ui.entry.chatlist.ChatListEntry
+import jp.co.nintendo.chat.ui.impl.chatlist.entry.ChatListEntryImpl
 import javax.inject.Singleton
 
 /**

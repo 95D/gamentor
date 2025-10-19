@@ -1,11 +1,11 @@
-package jp.co.nintendo.chat.ui.impl.chatlist
+package jp.co.nintendo.chat.ui.impl.chatlist.entry
 
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
+import jp.co.nintendo.chat.ui.entry.chatlist.ChatListEntry
 import jp.co.nintendo.chat.ui.impl.channel.compose.ChatChannelScreen
 import jp.co.nintendo.chat.ui.impl.chatlist.compose.ChatListScreen
 import jp.co.nintendo.ui.core.compose.adaptive.AppNavigableListDetailPaneScaffold

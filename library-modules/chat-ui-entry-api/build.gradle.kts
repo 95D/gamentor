@@ -15,6 +15,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":library-modules:setting-ui-entry-api"))
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.androidx.core.ktx)

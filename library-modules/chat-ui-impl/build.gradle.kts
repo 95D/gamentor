@@ -19,6 +19,7 @@ android {
 dependencies {
     implementation(project(":library-modules:ui-core-compose"))
     implementation(project(":library-modules:chat-ui-entry-api"))
+    implementation(project(":library-modules:setting-ui-entry-api"))
     implementation(project(":library-modules:chat-domain-api"))
     implementation(project(":library-modules:automation-domain-api"))
     implementation(project(":library-modules:setting-domain-api"))

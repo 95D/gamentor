@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import jp.co.nintendo.chat.ui.entry.chatlist.ChatListEntry
 import jp.co.nintendo.chat.ui.impl.channel.compose.ChatChannelScreen
 import jp.co.nintendo.chat.ui.impl.chatlist.compose.ChatListScreen
+import jp.co.nintendo.setting.ui.entry.app.AppSettingEntry
 import jp.co.nintendo.ui.core.compose.adaptive.AppNavigableListDetailPaneScaffold
 import javax.inject.Inject
 
@@ -22,6 +23,7 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
     override fun attachScreen(
         navGraphBuilder: NavGraphBuilder,
         navController: NavController,
+        settingEntry: AppSettingEntry,
         isExpandedScreen: Boolean
     ) {
         navGraphBuilder.composable(
@@ -33,6 +35,7 @@ class ChatListEntryImpl @Inject constructor() : ChatListEntry {
                     ChatListScreen(
                         isExpandedScreen = isExpandedScreen,
                         selectedChannel = it.selectedContentKey,
+                        onSettingActionClick = { settingEntry.navigate(navController) },
                         onNavigateToChatChannel = it.onNavigateToDetail,
                         onBackClicked = it.onBack
                     )

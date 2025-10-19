@@ -86,6 +86,7 @@ private fun AppNavHost(
             chatListEntry.attachScreen(
                 navGraphBuilder = this,
                 navController = navController,
+                settingEntry = appSettingEntry,
                 isExpandedScreen = isExpandedScreen
             )
 

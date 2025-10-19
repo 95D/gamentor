@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -45,9 +46,11 @@ fun ChatListScreen(
     isExpandedScreen: Boolean,
     selectedChannel: ChatChannelContentKey?,
     onNavigateToChatChannel: suspend (ChatChannelContentKey) -> Unit,
+    onSettingActionClick: () -> Unit,
     onBackClicked: () -> Unit,
     chatListViewModel: ChatListViewModel = hiltViewModel(),
 ) {
+    val semanticColors = LocalAppSemanticColors.current
     Scaffold(
         topBar = {
             NdsListScreenAppBar(
@@ -56,7 +59,17 @@ fun ChatListScreen(
                     MultiLangR.string.title_chat_list
                 ),
                 onBackClicked = onBackClicked,
-                isDetailSelected = selectedChannel != null
+                isDetailSelected = selectedChannel != null,
+                actions = {
+                    IconButton(onClick = onSettingActionClick) {
+                        Icon(
+                            imageVector = Icons.Filled.Settings,
+                            tint = semanticColors.textDefault,
+                            contentDescription =
+                                stringResource(MultiLangR.string.navigation_suite_setting)
+                        )
+                    }
+                }
             )
         },
         contentWindowInsets = WindowInsets(0)

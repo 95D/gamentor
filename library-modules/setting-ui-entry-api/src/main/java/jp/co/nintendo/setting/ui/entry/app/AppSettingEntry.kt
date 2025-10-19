@@ -1,4 +1,4 @@
-package jp.co.nintendo.setting.ui.entry
+package jp.co.nintendo.setting.ui.entry.app
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

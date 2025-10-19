@@ -1,6 +1,5 @@
 package jp.co.nintendo.gamentor
 
-
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -19,12 +18,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.window.core.layout.WindowSizeClass
 import dagger.hilt.android.AndroidEntryPoint
-import jp.co.nintendo.chat.ui.chatlist.ChatListEntry
+import jp.co.nintendo.chat.ui.entry.chatlist.ChatListEntry
 import jp.co.nintendo.design.system.theme.AppTheme
 import jp.co.nintendo.design.system.theme.LocalAppSemanticColors
 import jp.co.nintendo.gamentor.theme.AppThemeDeterminant
 import jp.co.nintendo.gamentor.viewmodel.AppConfigurationViewModel
-import jp.co.nintendo.setting.ui.entry.AppSettingEntry
+import jp.co.nintendo.setting.ui.entry.app.AppSettingEntry
 import javax.inject.Inject
 
 /**

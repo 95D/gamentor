@@ -11,10 +11,22 @@ android {
 }
 
 dependencies {
+    implementation(project(":library-modules:setting-domain-api"))
+    implementation(project(":library-modules:setting-data-source-local-api"))
+
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    testImplementation(libs.junit)
+    implementation(libs.timber)
+    implementation(libs.bundles.room)
+    add("ksp", libs.androidx.room.compiler)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.bundles.paging)
+    implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.androidx.paging.testing)
 }

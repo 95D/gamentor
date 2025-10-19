@@ -25,6 +25,7 @@
     <string name="setting_subject_advance">高級設定</string>
     <string name="setting_item_app_language">言語</string>
     <string name="setting_item_app_theme">着せかえ</string>
+    <string name="setting_item_edit_chess">チェス·シミュレーション</string>
     <string name="setting_item_show_all_messages">すべてのメッセージ表示</string>
     <string name="locale_default">システムの言語</string>
     <string name="locale_english">英語</string>
@@ -33,4 +34,7 @@
     <string name="theme_light">基本（白）</string>
     <string name="theme_dark">基本（黒）</string>
     <string name="theme_sakura">さくら</string>
+    <string name="chess_reset_empty">ボードを片付ける</string>
+    <string name="chess_reset_standard">基本配置にする</string>
+    <string name="chess_reset_fools_mate">フールズ・メイト既報にする</string>
 </resources>

@@ -25,6 +25,7 @@
     <string name="setting_subject_advance">Advance</string>
     <string name="setting_item_app_language">Language</string>
     <string name="setting_item_app_theme">Theme</string>
+    <string name="setting_item_edit_chess">Edit chess</string>
     <string name="setting_item_show_all_messages">Show all messages</string>
     <string name="locale_default">Default</string>
     <string name="locale_english">English</string>
@@ -33,4 +34,7 @@
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_sakura">Sakura</string>
+    <string name="chess_reset_empty">Reset to empty</string>
+    <string name="chess_reset_standard">Reset to standard</string>
+    <string name="chess_reset_fools_mate">Reset to pool mate</string>
 </resources>

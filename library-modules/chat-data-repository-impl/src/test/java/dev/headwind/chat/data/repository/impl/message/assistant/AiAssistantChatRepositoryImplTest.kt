@@ -167,9 +167,7 @@ class AiAssistantChatRepositoryImplTest {
     fun `Exchange message failed during insert message`() = runTest {
         val mockContent = mock<MessageContent>()
         val mockSenderExtras = mock<MessageSenderExtras>()
-        val mockSentMessageEntity = mock<ChatMessageEntity> {
-            on { localMessageId } doReturn "MSG_01"
-        }
+        val mockSentMessageEntity = mock<ChatMessageEntity>()
         whenever(
             chatMessageEntityFactory.create(
                 "channelId",
@@ -203,9 +201,7 @@ class AiAssistantChatRepositoryImplTest {
     fun `Exchange message failed`() = runTest {
         val mockContent = mock<MessageContent>()
         val mockSenderExtras = mock<MessageSenderExtras>()
-        val mockSentMessageEntity = mock<ChatMessageEntity> {
-            on { localMessageId } doReturn "MSG_01"
-        }
+        val mockSentMessageEntity = mock<ChatMessageEntity>()
         whenever(
             chatMessageEntityFactory.create(
                 "channelId",
@@ -278,9 +274,7 @@ class AiAssistantChatRepositoryImplTest {
     fun `Exchange message success`() = runTest {
         val mockContent = mock<MessageContent>()
         val mockSenderExtras = mock<MessageSenderExtras>()
-        val mockSentMessageEntity = mock<ChatMessageEntity> {
-            on { localMessageId } doReturn "MSG_01"
-        }
+        val mockSentMessageEntity = mock<ChatMessageEntity>()
         whenever(
             chatMessageEntityFactory.create(
                 "channelId",

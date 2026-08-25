@@ -1,0 +1,64 @@
+package dev.headwind.chat.ui.impl.chatlist.entry
+
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.navigation.NamedNavArgument
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import dev.headwind.chat.ui.entry.chatlist.ChatListEntry
+import dev.headwind.chat.ui.impl.channel.compose.ChatChannelScreen
+import dev.headwind.chat.ui.impl.chatlist.compose.ChatListScreen
+import dev.headwind.setting.ui.entry.app.AppSettingEntry
+import dev.headwind.ui.core.compose.adaptive.AppNavigableListDetailPaneScaffold
+import javax.inject.Inject
+
+/**
+ * An implementation of [ChatListEntry]
+ */
+class ChatListEntryImpl @Inject constructor() : ChatListEntry {
+    override val route: String = CHAT_LIST_ROUTE_BASE
+    private val arguments: List<NamedNavArgument> = emptyList()
+
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
+    override fun attachScreen(
+        navGraphBuilder: NavGraphBuilder,
+        navController: NavController,
+        settingEntry: AppSettingEntry,
+        isExpandedScreen: Boolean
+    ) {
+        navGraphBuilder.composable(
+            route = route,
+            arguments = arguments
+        ) { backStackEntry ->
+            AppNavigableListDetailPaneScaffold(
+                listPane = {
+                    ChatListScreen(
+                        isExpandedScreen = isExpandedScreen,
+                        selectedChannel = it.selectedContentKey,
+                        onSettingActionClick = { settingEntry.navigate(navController) },
+                        onNavigateToChatChannel = it.onNavigateToDetail,
+                        onBackClicked = it.onBack
+                    )
+                },
+                detailPane = {
+                    ChatChannelScreen(
+                        isExpandedScreen = isExpandedScreen,
+                        channelId = it.selectedContentKey?.channelId.orEmpty(),
+                        onBackClicked = it.onBack
+                    )
+                }
+            )
+        }
+    }
+
+    override fun navigateAsTop(navController: NavController) {
+        navController.navigate(route) {
+            popUpTo(navController.graph.id) { inclusive = true }
+            launchSingleTop = true
+        }
+    }
+
+    private companion object {
+        const val CHAT_LIST_ROUTE_BASE = "chat_list"
+    }
+}

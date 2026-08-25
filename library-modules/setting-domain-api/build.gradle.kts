@@ -2,11 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    id("jp.co.nintendo.android.library")
+    id("dev.headwind.android.library")
 }
 
 android {
-    namespace = "jp.co.nintendo.setting"
+    namespace = "dev.headwind.setting"
 }
 
 dependencies {

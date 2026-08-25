@@ -6,11 +6,11 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-    id("jp.co.nintendo.android.library")
+    id("dev.headwind.android.library")
 }
 
 android {
-    namespace = "jp.co.nintendo.chat.ui.impl"
+    namespace = "dev.headwind.chat.ui.impl"
     buildFeatures {
         compose = true
     }

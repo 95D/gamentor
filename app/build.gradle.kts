@@ -4,14 +4,14 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
-    id("jp.co.nintendo.android.application")
+    id("dev.headwind.android.application")
 }
 
 android {
-    namespace = "jp.co.nintendo.gamentor"
+    namespace = "dev.headwind.gamentor"
 
     defaultConfig {
-        applicationId = "jp.co.nintendo.gamentor"
+        applicationId = "dev.headwind.gamentor"
     }
 }
 

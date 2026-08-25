@@ -10,13 +10,13 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidApplication") {
-            id = "jp.co.nintendo.android.application"
+            id = "dev.headwind.android.application"
             implementationClass = "AndroidAppConventionPlugin"
         }
     }
     plugins {
         register("androidLibrary") {
-            id = "jp.co.nintendo.android.library"
+            id = "dev.headwind.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
     }
